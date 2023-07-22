@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "669321377979",
+    "project_id": "modifai-8f4dc",
+    "storage_bucket": "modifai-8f4dc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:669321377979:android:1cf4c2885b2e7fb6bfd19e",
+        "android_client_info": {
+          "package_name": "com.example.modifai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "669321377979-m941riasu6m6np566vg4vso4fgcpb9b9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.modifai",
+            "certificate_hash": "357211471719ad26fc6459a502bb4556837665d0"
+          }
+        },
+        {
+          "client_id": "669321377979-bqp36ht3hjucs4fj7phtaeufb6vmmmmp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD203ae8cxmAt8MYywLGVhQ0oo9YbR890M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "669321377979-bqp36ht3hjucs4fj7phtaeufb6vmmmmp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
