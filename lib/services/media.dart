@@ -77,7 +77,7 @@ class Media {
       );
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
-      if (await sharedPreferences.getString("access_token") == null) {
+      if (sharedPreferences.getString("access_token") == null) {
         AuthAPI.getModifaiAccessToken();
       }
       final uploadResponse = await request.send();

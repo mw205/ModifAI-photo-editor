@@ -23,12 +23,11 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    
     final size = MediaQuery.of(context).size;
     final double height = size.height;
     final double width = size.width;
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xff05161A),
       drawer: const ModifAIDrawer(),
       appBar: AppBar(

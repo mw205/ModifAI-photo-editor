@@ -1,11 +1,11 @@
 import 'dart:async';
 
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
-import 'package:modifai/components/ImageViewer/modifai_progress_indicator.dart';
 import 'package:modifai/screens/home.dart';
 import 'package:modifai/services/media.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -51,156 +51,102 @@ class _ChooseImageButtonState extends State<ChooseImageButton> {
     } else {
       bool isImage = await Media.isImageURL(imageUrl!);
       if (isImage == true) {
-        DialogUtils.modifAiProgressindicator();
         Future<Uint8List?> imageData = Media.loadImageData(imageUrl);
         Get.to(() => ImageViewerScreen.data(data: imageData));
       }
     }
   }
 
-  // Future<void> _showSearchBar() async {
-  //   final TextEditingController textEditingController = TextEditingController();
-  //   final FocusNode focusNode = FocusNode();
-
-  //   await showModalBottomSheet(
-  //     constraints: BoxConstraints(),
-  //     useSafeArea: true,
-  //     backgroundColor: const Color.fromARGB(0, 255, 255, 255),
-  //     isDismissible: true,
-  //     context: context,
-
-  //     builder: (BuildContext context) {
-  //       return Container(
-  //         decoration: BoxDecoration(
-  //           borderRadius: BorderRadius.circular(20),
-  //           color: Color.fromARGB(255, 10, 45, 52),
-  //         ),
-  //         height: MediaQuery.of(context).size.height * 0.22,
-  //         padding: const EdgeInsets.symmetric(horizontal: 20),
-  //         child: Column(
-  //           crossAxisAlignment: CrossAxisAlignment.center,
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [
-  //             Center(
-  //               child: Expanded(
-  //                 child: TextField(
-  //                   cursorColor: const Color(0xff0f969c),
-  //                   style: const TextStyle(color: Color(0xff0f969c)),
-  //                   decoration: InputDecoration(
-  //                     suffixIcon: Padding(
-  //                       padding: const EdgeInsets.all(8.0),
-  //                       child: Container(
-  //                         decoration: BoxDecoration(
-  //                           borderRadius: BorderRadius.circular(25),
-  //                           color: const Color.fromARGB(104, 15, 149, 156),
-  //                         ),
-  //                         child: IconButton(
-  //                             color: const Color(0xff0f969c),
-  //                             icon: const Icon(Icons.search),
-  //                             onPressed: () {
-  //                               _onSearch(textEditingController.text);
-  //                             }),
-  //                       ),
-  //                     ),
-  //                     hintText: 'Paste URL of the Image',
-  //                     hintStyle: const TextStyle(
-  //                         color: Color.fromARGB(124, 15, 149, 156),
-  //                         fontSize: 15),
-  //                     labelStyle: const TextStyle(color: Color(0xff0f969c)),
-  //                     enabledBorder: const OutlineInputBorder(
-  //                       borderSide: BorderSide(
-  //                         color: Color.fromARGB(255, 32, 82, 107),
-  //                       ),
-  //                     ),
-  //                     focusedBorder: const OutlineInputBorder(
-  //                         borderSide: BorderSide(color: Color(0xff0f969c))),
-  //                     focusColor: const Color(0xff0f969c),
-  //                     labelText: "Enter the URL of the image",
-  //                   ),
-  //                   controller: textEditingController,
-  //                   focusNode: focusNode,
-  //                   onSubmitted: (_) {
-  //                     _onSearch(textEditingController.text);
-  //                   },
-  //                 ),
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-
-  Future<void> _showSearchBar() async {
+  Future<void> _showAlertDialog() async {
     final TextEditingController textEditingController = TextEditingController();
     final FocusNode focusNode = FocusNode();
-    await Future.delayed(const Duration(milliseconds: 10));
-    await Get.bottomSheet(
-      isDismissible: true,
+    return showDialog<void>(
       context: context,
+      barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
-        return Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-          color: const Color.fromARGB(255, 10, 45, 52),
-        ),
-        height: MediaQuery.of(context).size.height * 0.2,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Center(
-              child: Expanded(
-                child: TextField(
-                  cursorColor: const Color(0xff0f969c),
-                  style: const TextStyle(color: Color(0xff0f969c)),
-                  decoration: InputDecoration(
-                    suffixIcon: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25),
-                          color: const Color.fromARGB(104, 15, 149, 156),
-                        ),
-                        child: IconButton(
-                            color: const Color(0xff0f969c),
-                            icon: const Icon(Icons.search),
-                            onPressed: () {
-                              _onSearch(textEditingController.text);
-                            }),
-                      ),
-                    ),
-                    hintText: 'Paste URL of the Image',
-                    hintStyle: const TextStyle(
-                        color: Color.fromARGB(124, 15, 149, 156), fontSize: 15),
-                    labelStyle: const TextStyle(color: Color(0xff0f969c)),
-                    enabledBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color.fromARGB(255, 32, 82, 107),
-                      ),
-                    ),
-                    focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xff0f969c))),
-                    focusColor: const Color(0xff0f969c),
-                    labelText: "Enter the URL of the image",
+        return AlertDialog(
+          backgroundColor: const Color.fromARGB(255, 10, 45, 52),
+
+          // <-- SEE HERE
+          title: const Text(
+            'Search',
+            style: TextStyle(fontSize: 23, color: Color(0xff0f969c)),
+          ),
+          content: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: TextField(
+              cursorColor: const Color(0xff0f969c),
+              style: const TextStyle(color: Color(0xff0f969c)),
+              decoration: const InputDecoration(
+                hintText: 'Paste URL of the Image',
+                hintStyle: TextStyle(
+                    color: Color.fromARGB(124, 15, 149, 156), fontSize: 15),
+                labelStyle:
+                    TextStyle(color: Color(0xff0f969c), fontSize: 15),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color.fromARGB(255, 32, 82, 107),
                   ),
-                  controller: textEditingController,
-                  focusNode: focusNode,
-                  onSubmitted: (_) {
-                    _onSearch(textEditingController.text);
-                  },
                 ),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xff0f969c))),
+                focusColor: Color(0xff0f969c),
+                labelText: "URL of the image",
+              ),
+              controller: textEditingController,
+              focusNode: focusNode,
+              onSubmitted: (_) {
+                _onSearch(textEditingController.text);
+              },
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                'Cancel',
+                style: TextStyle(
+                  color: Color(0xff0f969c),
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+                color: const Color.fromARGB(104, 15, 149, 156),
+              ),
+              child: IconButton(
+                  color: const Color(0xff0f969c),
+                  icon: const Icon(Icons.search),
+                  onPressed: () {
+                    _onSearch(textEditingController.text);
+                  }),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 45.0),
+              child: TextButton(
+                child: const Text(
+                  'Paste',
+                  style: TextStyle(
+                    color: Color(0xff0f969c),
+                  ),
+                ),
+                onPressed: () {
+                  FlutterClipboard.paste().then((value) {
+                    // Do what ever you want with the value.
+                    setState(() {
+                      textEditingController.text = value;
+                    });
+                  });
+                },
               ),
             ),
           ],
-        ),
-      ),
+        );
+      },
     );
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      focusNode.requestFocus();
-    });
   }
 
   @override
@@ -313,7 +259,8 @@ class _ChooseImageButtonState extends State<ChooseImageButton> {
               height: height * 0.161,
             ),
             onTap: () async {
-              _showSearchBar();
+              _showAlertDialog();
+              //_showSearchBar();
             });
       default:
         return GestureDetector(
