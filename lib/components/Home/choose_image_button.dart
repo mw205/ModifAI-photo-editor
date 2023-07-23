@@ -138,9 +138,11 @@ class _ChooseImageButtonState extends State<ChooseImageButton> {
     await Future.delayed(const Duration(milliseconds: 10));
     await Get.bottomSheet(
       isDismissible: true,
-      Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
           color: const Color.fromARGB(255, 10, 45, 52),
         ),
         height: MediaQuery.of(context).size.height * 0.2,
