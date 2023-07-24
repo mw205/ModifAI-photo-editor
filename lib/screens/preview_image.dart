@@ -87,7 +87,6 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
         isUploading = true;
       });
       photoId = await Media.uploadImage(file: await widget.asset!.file);
-      print(photoId);
       if (isUploading == true && photoId != null) {
         if (photoId == "") {
           setState(() {
@@ -99,6 +98,7 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
           setState(() {
             isUploading = false;
             isUploaded = true;
+            isNotUploaded = false;
           });
         }
       }
@@ -109,10 +109,19 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
 
       photoId = await Media.uploadImage(xFile: widget.xFile);
       if (isUploading == true && photoId != null) {
-        setState(() {
-          isUploading = false;
-          isUploaded = true;
-        });
+        if (photoId == "") {
+          setState(() {
+            isNotUploaded = true;
+            isUploaded = false;
+            isUploading = false;
+          });
+        } else {
+          setState(() {
+            isUploading = false;
+            isUploaded = true;
+            isNotUploaded = false;
+          });
+        }
       }
     } else if (widget.data != null) {
       setState(() {
@@ -120,10 +129,19 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
       });
       photoId = await Media.uploadImage(data: widget.data);
       if (isUploading == true && photoId != null) {
-        setState(() {
-          isUploading = false;
-          isUploaded = true;
-        });
+        if (photoId == "") {
+          setState(() {
+            isNotUploaded = true;
+            isUploaded = false;
+            isUploading = false;
+          });
+        } else {
+          setState(() {
+            isUploading = false;
+            isUploaded = true;
+            isNotUploaded = false;
+          });
+        }
       }
     } else if (widget.file != null) {
       setState(() {
@@ -132,10 +150,19 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
 
       photoId = await Media.uploadImage(file: widget.file);
       if (isUploading == true && photoId != null) {
-        setState(() {
-          isUploading = false;
-          isUploaded = true;
-        });
+        if (photoId == "") {
+          setState(() {
+            isNotUploaded = true;
+            isUploaded = false;
+            isUploading = false;
+          });
+        } else {
+          setState(() {
+            isUploading = false;
+            isUploaded = true;
+            isNotUploaded = false;
+          });
+        }
       }
     }
   }
@@ -194,7 +221,7 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
                 padding: EdgeInsets.only(right: 18.0),
                 child: UploadingIndicator()),
           if (isUploaded && !isUploading) const ModifAiCheck(),
-          if (isNotUploaded) ModifAiFailed()
+          if (isNotUploaded) const ModifAiFailed()
         ],
       ),
       body: Column(
