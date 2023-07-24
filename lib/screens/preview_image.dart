@@ -10,6 +10,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modifai/components/ImageViewer/image_loader.dart';
 import 'package:modifai/components/ImageViewer/modifai_check.dart';
+import 'package:modifai/components/ImageViewer/modifai_failed.dart';
 import 'package:modifai/components/ImageViewer/modifai_functions_buttons.dart';
 import 'package:modifai/components/buttons/modifai_back_button.dart';
 import 'package:modifai/components/modifai_text.dart';
@@ -52,6 +53,7 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
 
   bool isUploading = false;
   bool isUploaded = false;
+  bool isNotUploaded = false;
   String? photoId;
 
   @override
@@ -59,6 +61,7 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
     super.initState();
     _uploadingImageData();
     _loadImageData();
+    initBannerAd();
   }
 
   void _loadImageData() async {
@@ -84,11 +87,20 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
         isUploading = true;
       });
       photoId = await Media.uploadImage(file: await widget.asset!.file);
+      print(photoId);
       if (isUploading == true && photoId != null) {
-        setState(() {
-          isUploading = false;
-          isUploaded = true;
-        });
+        if (photoId == "") {
+          setState(() {
+            isNotUploaded = true;
+            isUploaded = false;
+            isUploading = false;
+          });
+        } else {
+          setState(() {
+            isUploading = false;
+            isUploaded = true;
+          });
+        }
       }
     } else if (widget.xFile != null) {
       setState(() {
@@ -132,7 +144,6 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
   void dispose() {
     isUploading = false; // stop uploading media
     super.dispose();
-    initBannerAd();
   }
 
   late BannerAd bannerAd;
@@ -140,7 +151,7 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
   initBannerAd() {
     bannerAd = BannerAd(
         size: AdSize.banner,
-        adUnitId: AdsManager.bannerAdId,
+        adUnitId: AdsManager.imageViewerBannerAdId,
         listener: BannerAdListener(
           onAdLoaded: (ad) {
             setState(() {
@@ -148,11 +159,10 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
             });
           },
           onAdFailedToLoad: (ad, error) {
-            print(error);
             bannerAd.dispose();
           },
         ),
-        request: AdRequest())
+        request: const AdRequest())
       ..load();
   }
 
@@ -172,7 +182,7 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
                 if (widget.isShared) {
                   Get.to(() => const Home());
                 } else {
-                  Get.off(const Gallery());
+                  Get.off(() => const Gallery());
                 }
               },
             )),
@@ -183,22 +193,20 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
             const Padding(
                 padding: EdgeInsets.only(right: 18.0),
                 child: UploadingIndicator()),
-          if (isUploaded && !isUploading) const ModifAiCheck()
+          if (isUploaded && !isUploading) const ModifAiCheck(),
+          if (isNotUploaded) ModifAiFailed()
         ],
       ),
       body: Column(
         children: [
           if (isAdLoaded)
-            Padding(
-              padding: const EdgeInsets.only(top: 10.0),
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.095,
-                child: AdWidget(ad: bannerAd),
-              ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.09,
+              child: AdWidget(ad: bannerAd),
             )
           else
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.08,
+              height: MediaQuery.of(context).size.height * 0.09,
             ),
           Center(
             child: ImageLoader(

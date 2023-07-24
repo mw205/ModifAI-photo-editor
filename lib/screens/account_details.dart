@@ -1,11 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:modifai/components/AccountDetails/logout_button.dart';
 import 'package:modifai/components/AccountDetails/modifai_change_detail_button.dart';
 import 'package:modifai/components/AccountDetails/profile_photo.dart';
 import 'package:modifai/components/ImageViewer/modifai_progress_indicator.dart';
+import 'package:modifai/components/buttons/confirm_name_button.dart';
 import 'package:modifai/components/buttons/modifai_back_button.dart';
-import 'package:modifai/screens/registration.dart';
+
+import '../components/AccountDetails/delete_account_button.dart';
 
 class AccountDetails extends StatefulWidget {
   const AccountDetails({Key? key}) : super(key: key);
@@ -31,34 +34,34 @@ class _AccountDetailsState extends State<AccountDetails> {
     double width = size.width;
     return Scaffold(
       appBar: AppBar(
-        leading:  const Padding(
+        leading: const Padding(
           padding: EdgeInsets.only(left: 6.0, top: 8),
           child: ModifAiBackButton(),
         ),
         backgroundColor: const Color(0xff05161A),
         actions: [
           if (_isEditingName)
-            IconButton(
-              icon: const Icon(
-                Icons.check,
-                color: Color(0xff6da5c0),
-              ),
-              onPressed: () async {
-                final newName = _nameController.text;
-                if (newName.isNotEmpty) {
-                  final User? user = FirebaseAuth.instance.currentUser;
-                  DialogUtils.modifAiProgressindicator();
-                  if (user != null) {
-                    await user.updateDisplayName(newName);
-                    await user.reload();
-                    Get.back();
-                    setState(() {
-                      _isEditingName = false;
-                    });
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0, top: 8),
+              child: ConfirmNameButton(
+                newName: _nameController.text,
+                onPressed: () async {
+                  final newName = _nameController.text;
+                  if (newName.isNotEmpty) {
+                    final User? user = FirebaseAuth.instance.currentUser;
+                    DialogUtils.modifAiProgressindicator();
+                    if (user != null) {
+                      await user.updateDisplayName(newName);
+                      await user.reload();
+                      Get.back();
+                      setState(() {
+                        _isEditingName = false;
+                      });
+                    }
                   }
-                }
-              },
-            ),
+                },
+              ),
+            )
         ],
       ),
       backgroundColor: const Color(0xff05161A),
@@ -136,8 +139,9 @@ class _AccountDetailsState extends State<AccountDetails> {
                 endIndent: 30,
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 10.0),
-                child: Row(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: 
+                Row(
                   children: [
                     const Padding(
                       padding: EdgeInsets.only(
@@ -153,33 +157,22 @@ class _AccountDetailsState extends State<AccountDetails> {
                       width: width * 0.159,
                     ),
                     Text(
-                      (FirebaseAuth.instance.currentUser != null)
-                          ? FirebaseAuth.instance.currentUser!.email!
-                          : '',
+                      FirebaseAuth.instance.currentUser!.email!,
                       style: TextStyle(
                           color: Colors.white, fontSize: height * 0.021),
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: height * 0.15),
-              TextButton(
-                onPressed: () async {
-                  DialogUtils.modifAiProgressindicator();
-                  await FirebaseAuth.instance.signOut();
-                  Get.offAll(() => const Registration());
-                  Get.snackbar(
-                    "Alert",
-                    "You are not signed in now, please register to access all the features",
-                    colorText: Colors.white,
-                    snackPosition: SnackPosition.BOTTOM,
-                  );
-                },
-                child: const Text(
-                  'Logout',
-                  style: TextStyle(fontSize: 20, color: Colors.red),
-                ),
+              const Divider(
+                color: Colors.grey,
+                thickness: 0.5,
+                indent: 10,
+                endIndent: 30,
               ),
+              SizedBox(height: height * 0.15),
+              const LogoutButton(),
+              const DeleteAccountButton()
             ],
           ),
         ],

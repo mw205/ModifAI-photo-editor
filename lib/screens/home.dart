@@ -29,7 +29,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   initBannerAd() {
     bannerAd = BannerAd(
         size: AdSize.banner,
-        adUnitId: AdsManager.bannerAdId,
+        adUnitId: AdsManager.homeBannerAdId,
         listener: BannerAdListener(
           onAdLoaded: (ad) {
             setState(() {
@@ -37,11 +37,10 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
             });
           },
           onAdFailedToLoad: (ad, error) {
-            print(error);
             bannerAd.dispose();
           },
         ),
-        request: AdRequest())
+        request: const AdRequest())
       ..load();
   }
 
@@ -118,7 +117,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
               width: bannerAd.size.width.toDouble(),
               child: AdWidget(ad: bannerAd),
             )
-          : SizedBox(),
+          : const SizedBox(),
     );
   }
 }

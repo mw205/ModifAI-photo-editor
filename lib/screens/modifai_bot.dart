@@ -5,6 +5,8 @@ import 'package:modifai/components/buttons/send_button.dart';
 import 'package:modifai/components/modifai_text.dart';
 import 'package:photo_view/photo_view.dart';
 
+import '../components/ModifAi bot/text_fields_modifai.dart';
+
 class ModifAiBotPage extends StatefulWidget {
   final String mediaUrl;
   final String photoId;
@@ -71,96 +73,43 @@ class _ModifAiBotPageState extends State<ModifAiBotPage> {
                   height: height * 0.3,
                   child: Column(
                     children: [
+                      //select mask textfield
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8.0, vertical: 8),
-                        child: TextFormField(
-                          maxLines: 1,
-                          textAlignVertical: TextAlignVertical.top,
-                          cursorColor: const Color(0xff0f969c),
-                          style: const TextStyle(color: Color(0xff0f969c)),
-                          controller: selectcontroller,
-                          decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 25.0, horizontal: 10),
-                              labelStyle:
-                                  const TextStyle(color: Color(0xff0f969c)),
-                              enabledBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Color.fromARGB(255, 32, 82, 107)),
-                              ),
-                              focusedBorder: const OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xff0f969c)),
-                              ),
-                              focusColor: const Color(0xff0f969c),
-                              labelText: "Select what you want to change",
-                              hintText:
-                                  "tell the bot what is the the thing you want to change",
-                              hintStyle: const TextStyle(
-                                  color: Color.fromARGB(123, 15, 149, 156),
-                                  fontSize: 15),
-                              suffixIcon: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8.0, vertical: 8),
-                                child: ClearTextButton(
-                                    textEditingController: selectcontroller),
-                              )),
+                        child: ModifAiTextField.type(
+                          textEditingController: selectcontroller,
+                          textFieldType: ModifAiBotTextFieldType.select,
                         ),
                       ),
+                      //prompt textfield
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8.0, vertical: 9),
-                        child: TextFormField(
-                          maxLines: 3,
-                          maxLength: 500,
-                          textAlignVertical: TextAlignVertical.top,
-                          cursorColor: const Color(0xff0f969c),
-                          style: const TextStyle(color: Color(0xff0f969c)),
-                          controller: promptcontroller,
-                          decoration: InputDecoration(
-                              counterStyle: const TextStyle(
-                                color: Color(0xff0f969c),
-                              ),
-                              suffixIcon: SizedBox(
-                                height: height * 0.14,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            bottom: 10.0, top: 1),
-                                        child: SendButton(
-                                          photoId: widget.photoId,
-                                          promptText: promptcontroller.text,
-                                          selectText: selectcontroller.text,
-                                        ),
-                                      ),
-                                      ClearTextButton(
-                                          textEditingController:
-                                              promptcontroller)
-                                    ],
+                        child: ModifAiTextField.type(
+                          textEditingController: promptcontroller,
+                          textFieldType: ModifAiBotTextFieldType.prompt,
+                          suffixIcon: SizedBox(
+                            height: height * 0.14,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        bottom: 10.0, top: 1),
+                                    child: SendButton(
+                                      photoId: widget.photoId,
+                                      promptText: promptcontroller.text,
+                                      selectText: selectcontroller.text,
+                                    ),
                                   ),
-                                ),
+                                  ClearTextButton(
+                                      textEditingController: promptcontroller)
+                                ],
                               ),
-                              contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 25.0, horizontal: 10),
-                              labelStyle:
-                                  const TextStyle(color: Color(0xff0f969c)),
-                              enabledBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Color.fromARGB(255, 32, 82, 107)),
-                              ),
-                              focusedBorder: const OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xff0f969c)),
-                              ),
-                              focusColor: const Color(0xff0f969c),
-                              labelText: "Enter a prompt",
-                              hintText: "tell the bot what you want to change",
-                              hintStyle: const TextStyle(
-                                  color: Color.fromARGB(123, 15, 149, 156))),
+                            ),
+                          ),
                         ),
                       ),
                     ],

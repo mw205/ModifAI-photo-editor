@@ -20,10 +20,9 @@ class _CallGalleryState extends State<CallGallery> {
   late BannerAd bannerAd;
   bool isAdLoaded = false;
   initBannerAd() {
-    print(AdsManager.bannerAdId);
     bannerAd = BannerAd(
         size: AdSize.banner,
-        adUnitId:  AdsManager.bannerAdId,
+        adUnitId: AdsManager.galleryBannerAdId,
         listener: BannerAdListener(
           onAdLoaded: (ad) {
             setState(() {
@@ -31,11 +30,10 @@ class _CallGalleryState extends State<CallGallery> {
             });
           },
           onAdFailedToLoad: (ad, error) {
-            print(error);
             bannerAd.dispose();
           },
         ),
-        request: AdRequest())
+        request: const AdRequest())
       ..load();
   }
 
@@ -47,12 +45,9 @@ class _CallGalleryState extends State<CallGallery> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           if (isAdLoaded)
-            Padding(
-              padding: const EdgeInsets.only(top: 10.0),
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.095,
-                child: AdWidget(ad: bannerAd),
-              ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.096,
+              child: AdWidget(ad: bannerAd),
             )
           else
             SizedBox(

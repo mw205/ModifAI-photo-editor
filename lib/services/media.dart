@@ -95,7 +95,7 @@ class Media {
       } catch (e) {
         Get.snackbar(
           "Alert",
-          "there is an error in our servers, please try again later !!",
+          "there is an error in our servers 😔, please try again later !!",
           colorText: Colors.white,
           snackPosition: SnackPosition.TOP,
         );

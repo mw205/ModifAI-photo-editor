@@ -8,8 +8,12 @@ class SendButton extends StatefulWidget {
   final String? photoId;
   final String? promptText;
   final String? selectText;
-  const SendButton(
-      {super.key, required this.photoId, this.promptText, this.selectText});
+  const SendButton({
+    super.key,
+    required this.photoId,
+    this.promptText,
+    this.selectText,
+  });
 
   @override
   State<SendButton> createState() => _SendButtonState();
@@ -29,12 +33,20 @@ class _SendButtonState extends State<SendButton> {
         color: const Color.fromARGB(104, 15, 149, 156),
       ),
       child: IconButton(
-          color: const Color.fromARGB(255, 58, 201, 208),
-          icon: const Icon(
-            Icons.send_rounded,
-            size: 23,
-          ),
-          onPressed: () async {
+        color: const Color.fromARGB(255, 58, 201, 208),
+        icon: const Icon(
+          Icons.send_rounded,
+          size: 23,
+        ),
+        onPressed: () async {
+          if (widget.promptText == "" || widget.selectText == "") {
+            Get.snackbar(
+              "Alert",
+              "you can't keep any of these text fields empty, please fill them ",
+              colorText: Colors.white,
+              snackPosition: SnackPosition.BOTTOM,
+            );
+          } else {
             Get.snackbar(
               "Alert",
               "Your photo is being edited now and will take a while, please wait ",
@@ -51,6 +63,7 @@ class _SendButtonState extends State<SendButton> {
               Get.back();
               Get.to(() => ShowOutputImage(mediaUrl: mediaURL!));
             } else {
+              Get.back();
               Get.snackbar(
                 "Alert",
                 "There is an error in our servers 😔!! try again later ",
@@ -58,7 +71,9 @@ class _SendButtonState extends State<SendButton> {
                 snackPosition: SnackPosition.BOTTOM,
               );
             }
-          }),
+          }
+        },
+      ),
     );
   }
 }
