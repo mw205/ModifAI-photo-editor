@@ -1,10 +1,12 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lottie/lottie.dart';
 import 'package:modifai/components/Home/choose_image_button.dart';
 import 'package:modifai/components/Home/drawer/modifai_drawer_button.dart';
 import 'package:modifai/components/modifai_text.dart';
+import 'package:modifai/services/ads.dart';
 
 import '../components/Home/drawer/modifai_drawer.dart';
 
@@ -19,6 +21,28 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    initBannerAd();
+  }
+
+  late BannerAd bannerAd;
+  bool isAdLoaded = false;
+  initBannerAd() {
+    bannerAd = BannerAd(
+        size: AdSize.banner,
+        adUnitId: AdsManager.bannerAdId,
+        listener: BannerAdListener(
+          onAdLoaded: (ad) {
+            setState(() {
+              isAdLoaded = true;
+            });
+          },
+          onAdFailedToLoad: (ad, error) {
+            print(error);
+            bannerAd.dispose();
+          },
+        ),
+        request: AdRequest())
+      ..load();
   }
 
   @override
@@ -88,6 +112,13 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
           ],
         ),
       ),
+      bottomNavigationBar: isAdLoaded
+          ? SizedBox(
+              height: bannerAd.size.height.toDouble(),
+              width: bannerAd.size.width.toDouble(),
+              child: AdWidget(ad: bannerAd),
+            )
+          : SizedBox(),
     );
   }
 }

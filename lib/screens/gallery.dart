@@ -34,7 +34,6 @@ class _GalleryState extends State<Gallery> {
         ),
       ),
       body: const CallGallery(),
-      // bottomNavigationBar: SizedBox(height: ),
     );
   }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:modifai/components/Gallery/gallery_content.dart';
+import 'package:modifai/services/ads.dart';
 
 class CallGallery extends StatefulWidget {
   const CallGallery({super.key});
@@ -9,6 +11,34 @@ class CallGallery extends StatefulWidget {
 }
 
 class _CallGalleryState extends State<CallGallery> {
+  @override
+  void initState() {
+    initBannerAd();
+    super.initState();
+  }
+
+  late BannerAd bannerAd;
+  bool isAdLoaded = false;
+  initBannerAd() {
+    print(AdsManager.bannerAdId);
+    bannerAd = BannerAd(
+        size: AdSize.banner,
+        adUnitId:  AdsManager.bannerAdId,
+        listener: BannerAdListener(
+          onAdLoaded: (ad) {
+            setState(() {
+              isAdLoaded = true;
+            });
+          },
+          onAdFailedToLoad: (ad, error) {
+            print(error);
+            bannerAd.dispose();
+          },
+        ),
+        request: AdRequest())
+      ..load();
+  }
+
   GalleryContent gallery = const GalleryContent();
   @override
   Widget build(BuildContext context) {
@@ -16,9 +46,18 @@ class _CallGalleryState extends State<CallGallery> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.05,
-          ),
+          if (isAdLoaded)
+            Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.095,
+                child: AdWidget(ad: bannerAd),
+              ),
+            )
+          else
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.096,
+            ),
           Expanded(
             child: Container(
               padding: EdgeInsets.symmetric(
@@ -28,8 +67,8 @@ class _CallGalleryState extends State<CallGallery> {
               decoration: const BoxDecoration(
                 color: Color.fromARGB(255, 33, 72, 93),
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  topRight: Radius.circular(12),
+                  topLeft: Radius.circular(15),
+                  topRight: Radius.circular(15),
                 ),
               ),
               child: const GalleryContent(),

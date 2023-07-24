@@ -6,6 +6,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modifai/components/ImageViewer/image_loader.dart';
 import 'package:modifai/components/ImageViewer/modifai_check.dart';
@@ -18,6 +19,7 @@ import 'package:modifai/services/media.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 import '../components/ImageViewer/uploading_indicator.dart';
+import '../services/ads.dart';
 
 class ImageViewerScreen extends StatefulWidget {
   AssetEntity? asset;
@@ -130,6 +132,28 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
   void dispose() {
     isUploading = false; // stop uploading media
     super.dispose();
+    initBannerAd();
+  }
+
+  late BannerAd bannerAd;
+  bool isAdLoaded = false;
+  initBannerAd() {
+    bannerAd = BannerAd(
+        size: AdSize.banner,
+        adUnitId: AdsManager.bannerAdId,
+        listener: BannerAdListener(
+          onAdLoaded: (ad) {
+            setState(() {
+              isAdLoaded = true;
+            });
+          },
+          onAdFailedToLoad: (ad, error) {
+            print(error);
+            bannerAd.dispose();
+          },
+        ),
+        request: AdRequest())
+      ..load();
   }
 
   @override
@@ -164,13 +188,22 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
       ),
       body: Column(
         children: [
-          SizedBox(
-            height: height * 0.02,
-          ),
+          if (isAdLoaded)
+            Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.095,
+                child: AdWidget(ad: bannerAd),
+              ),
+            )
+          else
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.08,
+            ),
           Center(
             child: ImageLoader(
               imageData: _imageData,
-              height: height * 0.58,
+              height: height * 0.55,
               width: width * 0.95,
             ),
           ),
