@@ -29,6 +29,7 @@ class ImageViewerScreen extends StatefulWidget {
   File? file;
   late bool isShared = false;
   late bool isFromGallery = false;
+  late bool isFromSearch = false;
   ImageViewerScreen.asset({
     super.key,
     required this.asset,
@@ -36,7 +37,12 @@ class ImageViewerScreen extends StatefulWidget {
     isFromGallery = true;
   }
   ImageViewerScreen.xFile({super.key, required this.xFile});
-  ImageViewerScreen.data({super.key, required this.data});
+  ImageViewerScreen.data({
+    super.key,
+    required this.data,
+  }) {
+    isFromSearch = true;
+  }
   ImageViewerScreen.file({
     super.key,
     required this.file,
@@ -207,6 +213,8 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
             child: ModifAiBackButton(
               onTap: () {
                 if (widget.isShared) {
+                  Get.to(() => const Home());
+                } else if (widget.isFromSearch) {
                   Get.to(() => const Home());
                 } else {
                   Get.off(() => const Gallery());

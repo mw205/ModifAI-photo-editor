@@ -1,15 +1,16 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lottie/lottie.dart';
 import 'package:modifai/components/ImageViewer/modifai_progress_indicator.dart';
 import 'package:modifai/screens/modifai_bot.dart';
 import 'package:modifai/screens/output_image.dart';
+import 'package:modifai/services/ads.dart';
 import 'package:modifai/services/media.dart';
 
 enum ModifAiFunctionsButtonsType { removebg, modifaibot, cropper }
 
-class ModifAiFunctionsButtons extends StatelessWidget {
+class ModifAiFunctionsButtons extends StatefulWidget {
   final ModifAiFunctionsButtonsType? type;
   final Widget lottie;
   final double? buttonwidth;
@@ -44,18 +45,49 @@ class ModifAiFunctionsButtons extends StatelessWidget {
         super(key: key);
 
   @override
+  State<ModifAiFunctionsButtons> createState() =>
+      _ModifAiFunctionsButtonsState();
+}
+
+class _ModifAiFunctionsButtonsState extends State<ModifAiFunctionsButtons> {
+  @override
+  void initState() {
+    initInterstitialAd();
+    super.initState();
+  }
+
+  late InterstitialAd interstitialAd;
+  bool isAdLoaded = false;
+  initInterstitialAd() {
+    InterstitialAd.load(
+        adUnitId: AdsManager.outputInterstitialAdId,
+        request: const AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (ad) {
+            interstitialAd = ad;
+            setState(() {
+              isAdLoaded = true;
+            });
+          },
+          onAdFailedToLoad: (error) {
+            interstitialAd.dispose();
+          },
+        ));
+  }
+
+  @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     double height = size.height;
     double width = size.width;
     late String? mediaUrl;
-    switch (type) {
+    switch (widget.type) {
       case ModifAiFunctionsButtonsType.cropper:
         return ModifAiFunctionsButtons.customized(
-          isUploaded: isUploaded,
-          photoId: photoId,
+          isUploaded: widget.isUploaded,
+          photoId: widget.photoId,
           onTap: () async {
-            if (isUploaded == false) {
+            if (widget.isUploaded == false) {
               Get.snackbar(
                 "Alert",
                 "The photo is not uploded yet, please wait",
@@ -64,9 +96,17 @@ class ModifAiFunctionsButtons extends StatelessWidget {
               );
             } else {
               DialogUtils.modifAiProgressindicator();
-              mediaUrl = await Media.cropping(photoId: photoId!);
+              mediaUrl = await Media.cropping(photoId: widget.photoId!);
               if (mediaUrl != null) {
-                Get.to(() => ShowOutputImage(mediaUrl: mediaUrl!));
+                Get.back();
+                if (isAdLoaded) {
+                  Get.back();
+                  await interstitialAd.show();
+                  Get.to(() => ShowOutputImage(mediaUrl: mediaUrl!));
+                } else {
+                  Get.back();
+                  Get.to(() => ShowOutputImage(mediaUrl: mediaUrl!));
+                }
               } else {
                 Get.back();
                 Get.snackbar(
@@ -96,9 +136,9 @@ class ModifAiFunctionsButtons extends StatelessWidget {
         );
       case ModifAiFunctionsButtonsType.removebg:
         return ModifAiFunctionsButtons.customized(
-          photoId: photoId,
+          photoId: widget.photoId,
           onTap: () async {
-            if (isUploaded == false) {
+            if (widget.isUploaded == false) {
               Get.snackbar(
                 "Alert",
                 "The photo is not uploded yet, please wait",
@@ -107,12 +147,19 @@ class ModifAiFunctionsButtons extends StatelessWidget {
               );
             } else {
               DialogUtils.modifAiProgressindicator();
-              mediaUrl = await Media.removerbg(photoId: photoId!);
+              mediaUrl = await Media.removerbg(photoId: widget.photoId!);
               if (mediaUrl != null) {
-                Get.to(() => ShowOutputImage(mediaUrl: mediaUrl!));
+                Get.back();
+                if (isAdLoaded) {
+                  Get.back();
+                  await interstitialAd.show();
+                  Get.to(() => ShowOutputImage(mediaUrl: mediaUrl!));
+                } else {
+                  Get.back();
+                  Get.to(() => ShowOutputImage(mediaUrl: mediaUrl!));
+                }
               } else {
                 Get.back();
-
                 Get.snackbar(
                   "Alert",
                   "There is an error in our servers 😔!! try again later ",
@@ -137,14 +184,14 @@ class ModifAiFunctionsButtons extends StatelessWidget {
               style: TextStyle(color: Colors.white, fontSize: 16.5),
             ),
           ),
-          isUploaded: isUploaded,
+          isUploaded: widget.isUploaded,
         );
       case ModifAiFunctionsButtonsType.modifaibot:
         return ModifAiFunctionsButtons.customized(
-          photoId: photoId,
-          isUploaded: isUploaded,
+          photoId: widget.photoId,
+          isUploaded: widget.isUploaded,
           onTap: () async {
-            if (photoId == null) {
+            if (widget.photoId == null) {
               Get.snackbar(
                 "Alert",
                 "The photo is not uploded yet, please wait",
@@ -153,13 +200,13 @@ class ModifAiFunctionsButtons extends StatelessWidget {
               );
             } else {
               DialogUtils.modifAiProgressindicator();
-              mediaUrl = await Media.getMedia(photoId: photoId!);
+              mediaUrl = await Media.getMedia(photoId: widget.photoId!);
 
               if (mediaUrl != null) {
                 Get.back();
                 Get.to(() => ModifAiBotPage(
                       mediaUrl: mediaUrl!,
-                      photoId: photoId!,
+                      photoId: widget.photoId!,
                     ));
               } else {
                 Get.back();
@@ -210,17 +257,17 @@ class ModifAiFunctionsButtons extends StatelessWidget {
       default:
         return GestureDetector(
           onTap: () {
-            onTap!();
+            widget.onTap!();
           },
           child: Container(
             height: height * 0.104,
-            width: buttonwidth,
+            width: widget.buttonwidth,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              gradient: LinearGradient(colors: colorgradientlist),
+              gradient: LinearGradient(colors: widget.colorgradientlist),
             ),
             child: Row(
-              children: [lottie, text],
+              children: [widget.lottie, widget.text],
             ),
           ),
         );

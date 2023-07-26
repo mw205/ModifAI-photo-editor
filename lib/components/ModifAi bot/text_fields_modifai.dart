@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:modifai/components/buttons/clear_text_button.dart';
 
-enum ModifAiBotTextFieldType { select, prompt }
+enum ModifAiBotTextFieldType { select, prompt, search }
 
 class ModifAiTextField extends StatefulWidget {
   final TextEditingController textEditingController;
@@ -16,7 +16,7 @@ class ModifAiTextField extends StatefulWidget {
       {Key? key,
       required this.textEditingController,
       required this.labelText,
-      required this.hintText,
+      this.hintText,
       this.suffixIcon,
       required this.maxLines,
       this.maxLength})
@@ -63,6 +63,11 @@ class _ModifAiTextFieldState extends State<ModifAiTextField> {
           maxLines: 3,
           suffixIcon: widget.suffixIcon,
         );
+      case ModifAiBotTextFieldType.search:
+        return ModifAiTextField.customized(
+            textEditingController: widget.textEditingController,
+            labelText: "Press and Paste URL of the Image",
+            maxLines: 1);
       default:
         return TextFormField(
           maxLines: widget.maxLines,

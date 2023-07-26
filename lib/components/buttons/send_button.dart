@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:modifai/components/ImageViewer/modifai_progress_indicator.dart';
 import 'package:modifai/screens/output_image.dart';
+import 'package:modifai/services/ads.dart';
 import 'package:modifai/services/media.dart';
 
 class SendButton extends StatefulWidget {
@@ -20,6 +22,35 @@ class SendButton extends StatefulWidget {
 }
 
 class _SendButtonState extends State<SendButton> {
+  late InterstitialAd? interstitialAd;
+  bool isAdLoaded = false;
+  initInterstitialAd() {
+    InterstitialAd.load(
+        adUnitId: AdsManager.outputInterstitialAdId,
+        request: const AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (ad) {
+            interstitialAd = ad;
+            setState(() {
+              isAdLoaded = true;
+            });
+          },
+          onAdFailedToLoad: (error) {
+            interstitialAd!.dispose();
+            interstitialAd = null;
+            Future.delayed(const Duration(seconds: 1), () {
+              initInterstitialAd(); // Attempt to reload the ad after 10 seconds
+            });
+          },
+        ));
+  }
+
+  @override
+  void initState() {
+    initInterstitialAd();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     String? mediaURL;
@@ -59,9 +90,14 @@ class _SendButtonState extends State<SendButton> {
               mask: widget.selectText!,
               photoId: widget.photoId!,
             );
+            Get.back();
             if (mediaURL != null) {
-              Get.back();
-              Get.to(() => ShowOutputImage(mediaUrl: mediaURL!));
+              if (isAdLoaded) {
+                await interstitialAd!.show();
+                Get.to(() => ShowOutputImage(mediaUrl: mediaURL!));
+              } else {
+                Get.to(() => ShowOutputImage(mediaUrl: mediaURL!));
+              }
             } else {
               Get.back();
               Get.snackbar(

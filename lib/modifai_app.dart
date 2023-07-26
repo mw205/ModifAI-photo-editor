@@ -75,6 +75,7 @@ class _ModifAiAppState extends State<ModifAiApp> {
       );
     }
   }
+
 //this function will deal with links and return true only if the link has a photo
   bool isReceivedMediaAnimage() {
     if (_sharedMedia != null &&
@@ -102,6 +103,10 @@ class _ModifAiAppState extends State<ModifAiApp> {
                   .path),
             )
           : const SplashScreen(),
+      //  ShowOutputImage(
+      //     mediaUrl:
+      //         "https://images.unsplash.com/photo-1614027164847-1b28cfe1df60?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=786&q=80",
+      //   ),
       theme: ThemeData(
         useMaterial3: true,
         fontFamily: "Lato",

@@ -23,8 +23,8 @@ class Media {
   static Future<Map<String, String>> getAccessToken() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     Map<String, String> headers;
-    // print(
-    //     "this is token from media file:${preferences.getString("access_token")}");
+    debugPrint(
+        "this is token from media file:${preferences.getString("access_token")}");
     if (preferences.getString("access_token") == null) {
       AuthAPI.getModifaiAccessToken();
       headers = {
@@ -108,9 +108,9 @@ class Media {
 
   static Future<String?> removerbg({required String photoId}) async {
     final url = Uri.parse("$baseApi$models$removebg$photoId");
-
     final request = await http
         .post(url, headers: await getAccessToken(), body: {'id': photoId});
+
     try {
       Map<String, dynamic> responseMap = jsonDecode(request.body);
       String? mediaUrl = responseMap['media_url'];

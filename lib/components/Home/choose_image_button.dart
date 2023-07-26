@@ -1,13 +1,14 @@
 import 'dart:async';
 
-import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
+import 'package:modifai/components/ModifAi%20bot/text_fields_modifai.dart';
+import 'package:modifai/components/buttons/cancel_text_button.dart';
+import 'package:modifai/components/buttons/paste_text_button.dart';
+import 'package:modifai/components/buttons/srearch_button.dart';
 import 'package:modifai/screens/home.dart';
-import 'package:modifai/services/media.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../screens/gallery.dart';
@@ -45,102 +46,32 @@ class _ChooseImageButtonState extends State<ChooseImageButton> {
     super.initState();
   }
 
-  _onSearch(String? imageUrl) async {
-    if (imageUrl == "") {
-      Get.back();
-    } else {
-      bool isImage = await Media.isImageURL(imageUrl!);
-      if (isImage == true) {
-        Future<Uint8List?> imageData = Media.loadImageData(imageUrl);
-        Get.to(() => ImageViewerScreen.data(data: imageData));
-      }
-    }
-  }
 
-  Future<void> _showAlertDialog() async {
+  Future<void> _showSearchDialog() async {
     final TextEditingController textEditingController = TextEditingController();
-    final FocusNode focusNode = FocusNode();
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: const Color.fromARGB(255, 10, 45, 52),
-
-          // <-- SEE HERE
           title: const Text(
             'Search',
             style: TextStyle(fontSize: 23, color: Color(0xff0f969c)),
           ),
           content: SizedBox(
             width: MediaQuery.of(context).size.width,
-            child: TextField(
-              cursorColor: const Color(0xff0f969c),
-              style: const TextStyle(color: Color(0xff0f969c)),
-              decoration: const InputDecoration(
-                hintText: 'Paste URL of the Image',
-                hintStyle: TextStyle(
-                    color: Color.fromARGB(124, 15, 149, 156), fontSize: 15),
-                labelStyle:
-                    TextStyle(color: Color(0xff0f969c), fontSize: 15),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color.fromARGB(255, 32, 82, 107),
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xff0f969c))),
-                focusColor: Color(0xff0f969c),
-                labelText: "URL of the image",
-              ),
-              controller: textEditingController,
-              focusNode: focusNode,
-              onSubmitted: (_) {
-                _onSearch(textEditingController.text);
-              },
-            ),
+            child: ModifAiTextField.type(
+                textEditingController: textEditingController,
+                textFieldType: ModifAiBotTextFieldType.search),
           ),
           actions: <Widget>[
-            TextButton(
-              child: const Text(
-                'Cancel',
-                style: TextStyle(
-                  color: Color(0xff0f969c),
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-                color: const Color.fromARGB(104, 15, 149, 156),
-              ),
-              child: IconButton(
-                  color: const Color(0xff0f969c),
-                  icon: const Icon(Icons.search),
-                  onPressed: () {
-                    _onSearch(textEditingController.text);
-                  }),
-            ),
+            const CancelButton(),
+            SearchButton(imgUrl: textEditingController.text),
             Padding(
               padding: const EdgeInsets.only(right: 45.0),
-              child: TextButton(
-                child: const Text(
-                  'Paste',
-                  style: TextStyle(
-                    color: Color(0xff0f969c),
-                  ),
-                ),
-                onPressed: () {
-                  FlutterClipboard.paste().then((value) {
-                    // Do what ever you want with the value.
-                    setState(() {
-                      textEditingController.text = value;
-                    });
-                  });
-                },
+              child: PasteButton(
+                textEditingController: textEditingController,
               ),
             ),
           ],
@@ -259,7 +190,7 @@ class _ChooseImageButtonState extends State<ChooseImageButton> {
               height: height * 0.161,
             ),
             onTap: () async {
-              _showAlertDialog();
+              _showSearchDialog();
               //_showSearchBar();
             });
       default:
