@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:get/get.dart';
@@ -25,7 +27,9 @@ class ShowOutputImage extends StatefulWidget {
 class _ShowOutputImageState extends State<ShowOutputImage> {
   @override
   void initState() {
-    initBannerAd();
+    if (Platform.isAndroid) {
+      initBannerAd();
+    }
     super.initState();
   }
 
@@ -125,16 +129,17 @@ class _ShowOutputImageState extends State<ShowOutputImage> {
           const Spacer()
         ],
       ),
-      bottomNavigationBar: (isAdLoaded)
-          ? SizedBox(
-              height: AdSize.banner.height.toDouble(),
-              width: AdSize.banner.width.toDouble(),
-              child: AdWidget(ad: bannerAd),
-            )
-          : SizedBox(
-              height: AdSize.banner.height.toDouble(),
-              width: AdSize.banner.width.toDouble(),
-            ),
+      bottomNavigationBar:
+          (isAdLoaded && Theme.of(context).platform == TargetPlatform.android)
+              ? SizedBox(
+                  height: AdSize.banner.height.toDouble(),
+                  width: AdSize.banner.width.toDouble(),
+                  child: AdWidget(ad: bannerAd),
+                )
+              : SizedBox(
+                  height: AdSize.banner.height.toDouble(),
+                  width: AdSize.banner.width.toDouble(),
+                ),
     );
   }
 }
