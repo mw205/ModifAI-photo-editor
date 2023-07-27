@@ -52,7 +52,7 @@ class _ModifAiAppState extends State<ModifAiApp> {
         _sharedMedia = media;
       });
 
-      if (FirebaseAuth.instance.currentUser == null) {
+      if (FirebaseAuth.instance.currentUser != null) {
         Get.to(() => ImageViewerScreen.file(
               file: file,
             ));
