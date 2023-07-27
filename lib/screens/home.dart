@@ -1,5 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lottie/lottie.dart';
@@ -21,7 +23,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    initBannerAd();
+    if (Platform.isAndroid) {
+      initBannerAd();
+    }
   }
 
   late BannerAd bannerAd;
@@ -111,13 +115,14 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
           ],
         ),
       ),
-      bottomNavigationBar: isAdLoaded
-          ? SizedBox(
-              height: bannerAd.size.height.toDouble(),
-              width: bannerAd.size.width.toDouble(),
-              child: AdWidget(ad: bannerAd),
-            )
-          : const SizedBox(),
+      bottomNavigationBar:
+          isAdLoaded && Theme.of(context).platform == TargetPlatform.android
+              ? SizedBox(
+                  height: bannerAd.size.height.toDouble(),
+                  width: bannerAd.size.width.toDouble(),
+                  child: AdWidget(ad: bannerAd),
+                )
+              : const SizedBox(),
     );
   }
 }

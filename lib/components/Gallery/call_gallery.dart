@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:modifai/components/Gallery/gallery_content.dart';
@@ -13,7 +15,9 @@ class CallGallery extends StatefulWidget {
 class _CallGalleryState extends State<CallGallery> {
   @override
   void initState() {
-    initBannerAd();
+    if (Platform.isAndroid) {
+      initBannerAd();
+    }
     super.initState();
   }
 
@@ -44,7 +48,8 @@ class _CallGalleryState extends State<CallGallery> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          if (isAdLoaded)
+          if (isAdLoaded &&
+              Theme.of(context).platform == TargetPlatform.android)
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.096,
               child: AdWidget(ad: bannerAd),

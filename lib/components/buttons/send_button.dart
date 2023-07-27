@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -47,7 +49,9 @@ class _SendButtonState extends State<SendButton> {
 
   @override
   void initState() {
-    initInterstitialAd();
+    if (Platform.isAndroid) {
+      initInterstitialAd();
+    }
     super.initState();
   }
 
@@ -92,7 +96,8 @@ class _SendButtonState extends State<SendButton> {
             );
             Get.back();
             if (mediaURL != null) {
-              if (isAdLoaded) {
+              if (isAdLoaded &&
+                  Theme.of(context).platform == TargetPlatform.android) {
                 await interstitialAd!.show();
                 Get.to(() => ShowOutputImage(mediaUrl: mediaURL!));
               } else {

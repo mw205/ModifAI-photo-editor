@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -52,7 +54,9 @@ class ModifAiFunctionsButtons extends StatefulWidget {
 class _ModifAiFunctionsButtonsState extends State<ModifAiFunctionsButtons> {
   @override
   void initState() {
-    initInterstitialAd();
+    if (Platform.isAndroid) {
+      initInterstitialAd();
+    }
     super.initState();
   }
 
@@ -99,7 +103,8 @@ class _ModifAiFunctionsButtonsState extends State<ModifAiFunctionsButtons> {
               mediaUrl = await Media.cropping(photoId: widget.photoId!);
               if (mediaUrl != null) {
                 Get.back();
-                if (isAdLoaded) {
+                if (isAdLoaded &&
+                    Theme.of(context).platform == TargetPlatform.android) {
                   Get.back();
                   await interstitialAd.show();
                   Get.to(() => ShowOutputImage(mediaUrl: mediaUrl!));
@@ -150,7 +155,8 @@ class _ModifAiFunctionsButtonsState extends State<ModifAiFunctionsButtons> {
               mediaUrl = await Media.removerbg(photoId: widget.photoId!);
               if (mediaUrl != null) {
                 Get.back();
-                if (isAdLoaded) {
+                if (isAdLoaded &&
+                    Theme.of(context).platform == TargetPlatform.android) {
                   Get.back();
                   await interstitialAd.show();
                   Get.to(() => ShowOutputImage(mediaUrl: mediaUrl!));
@@ -201,7 +207,6 @@ class _ModifAiFunctionsButtonsState extends State<ModifAiFunctionsButtons> {
             } else {
               DialogUtils.modifAiProgressindicator();
               mediaUrl = await Media.getMedia(photoId: widget.photoId!);
-
               if (mediaUrl != null) {
                 Get.back();
                 Get.to(() => ModifAiBotPage(

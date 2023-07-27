@@ -67,7 +67,9 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
     super.initState();
     _uploadingImageData();
     _loadImageData();
-    initBannerAd();
+    if (Platform.isAndroid) {
+      initBannerAd();
+    }
   }
 
   void _loadImageData() async {
@@ -234,7 +236,8 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
       ),
       body: Column(
         children: [
-          if (isAdLoaded)
+          if (isAdLoaded &&
+              Theme.of(context).platform == TargetPlatform.android)
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.09,
               child: AdWidget(ad: bannerAd),
