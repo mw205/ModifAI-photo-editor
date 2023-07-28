@@ -182,6 +182,7 @@ class Media {
       final contentType = response.headers['content-type'];
       return contentType != null && contentType.startsWith('image/');
     } catch (e) {
+      Get.back();
       Get.snackbar(
         "Alert",
         "This URl doesn't have an image, try another one.",

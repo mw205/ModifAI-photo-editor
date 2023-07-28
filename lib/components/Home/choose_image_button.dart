@@ -191,7 +191,6 @@ class _ChooseImageButtonState extends State<ChooseImageButton> {
             ),
             onTap: () async {
               _showSearchDialog();
-              //_showSearchBar();
             });
       default:
         return GestureDetector(

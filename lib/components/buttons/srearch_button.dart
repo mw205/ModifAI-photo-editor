@@ -17,11 +17,7 @@ class SearchButton extends StatefulWidget {
 
 class _SearchButtonState extends State<SearchButton> {
   _onSearch(String? imageUrl) async {
-    DialogUtils.modifAiProgressindicator();
-    if (imageUrl == "") {
-      Get.back();
-      Get.back();
-    } else {
+      DialogUtils.modifAiProgressindicator();
       bool isImage = await Media.isImageURL(imageUrl!);
       if (isImage == true) {
         Future<Uint8List?> imageData = Media.loadImageData(imageUrl);
@@ -30,7 +26,7 @@ class _SearchButtonState extends State<SearchButton> {
             data: imageData,
           ),
         );
-      }
+
     }
   }
 

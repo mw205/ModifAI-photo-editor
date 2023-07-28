@@ -132,7 +132,7 @@ class _ShowOutputImageState extends State<ShowOutputImage> {
       bottomNavigationBar:
           (isAdLoaded && Theme.of(context).platform == TargetPlatform.android)
               ? SizedBox(
-                  height: AdSize.banner.height.toDouble(),
+                  height: AdSize.banner.height.toDouble()+ height*80/height,
                   width: AdSize.banner.width.toDouble(),
                   child: AdWidget(ad: bannerAd),
                 )

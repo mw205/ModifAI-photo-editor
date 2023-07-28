@@ -107,18 +107,17 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                 ),
               ],
             ),
-            SizedBox(
-              height: height * 0.1,
-            ),
-            LottieBuilder.asset(
-                "assets/animation/90531-thin-background-lines-stripes-loop.json")
+            Stack(
+              children:[LottieBuilder.asset(
+                  "assets/animation/90531-thin-background-lines-stripes-loop.json")] ,
+            )
           ],
         ),
       ),
       bottomNavigationBar:
           isAdLoaded && Theme.of(context).platform == TargetPlatform.android
               ? SizedBox(
-                  height: bannerAd.size.height.toDouble(),
+                  height: bannerAd.size.height.toDouble()+ height*80/height,
                   width: bannerAd.size.width.toDouble(),
                   child: AdWidget(ad: bannerAd),
                 )

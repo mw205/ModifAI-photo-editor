@@ -70,6 +70,7 @@ class _ModifAiTextFieldState extends State<ModifAiTextField> {
             maxLines: 1);
       default:
         return TextFormField(
+        
           maxLines: widget.maxLines,
           maxLength: widget.maxLength,
           textAlignVertical: TextAlignVertical.top,
