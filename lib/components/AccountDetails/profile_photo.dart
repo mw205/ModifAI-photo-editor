@@ -30,6 +30,8 @@ class _ProfilePhotoState extends State<ProfilePhoto> {
       } else {
         photo = NetworkImage(FirebaseAuth.instance.currentUser!.photoURL!);
       }
+    } else {
+      photo = const AssetImage("assets/images/profileImage.png");
     }
   }
 
@@ -59,12 +61,11 @@ class _ProfilePhotoState extends State<ProfilePhoto> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final height = size.height;
-    final width = size.width;
 
     return Stack(
       children: [
         SizedBox(
-          width: width * 0.5,
+          width: height * 0.25,
           height: height * 0.25,
           child: ClipPath(
             clipper: const ShapeBorderClipper(
@@ -86,7 +87,16 @@ class _ProfilePhotoState extends State<ProfilePhoto> {
           right: 0,
           child: ChangeDetailsButton(
             onTap: () {
-              changePhoto();
+              if (FirebaseAuth.instance.currentUser != null) {
+                changePhoto();
+              } else {
+                Get.snackbar(
+                  "Alert",
+                  "This account is for demo version this feature is disabled",
+                  colorText: Colors.white,
+                  snackPosition: SnackPosition.BOTTOM,
+                );
+              }
             },
           ),
         ),

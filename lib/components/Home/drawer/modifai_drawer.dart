@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modifai/screens/account_details.dart';
+import 'package:modifai/services/authentication.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../screens/about_modifai_screen.dart';
@@ -41,8 +42,9 @@ class _ModifAIDrawerState extends State<ModifAIDrawer> {
                 'Account',
                 style: TextStyle(fontSize: 20, color: Color(0xff6da5c0)),
               ),
-              onTap: () {
-                if (FirebaseAuth.instance.currentUser != null) {
+              onTap: () async {
+                if (FirebaseAuth.instance.currentUser != null ||
+                    await AuthAPI.loginDemo() == true) {
                   Get.to(() => const AccountDetails());
                 }
               }),
@@ -71,7 +73,7 @@ class _ModifAIDrawerState extends State<ModifAIDrawer> {
             onTap: () {
               try {
                 launchUrl(Uri.parse(
-                    'https://play.google.com/store/apps/details?id=market://details?id=com.example.modifai'));
+                    'https://play.google.com/store/apps/details?id=market://details?id=com.modifai.photoeditor'));
               } catch (e) {
                 launchUrl(Uri.parse("https://modifai.onrender.com/"));
               }

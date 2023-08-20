@@ -44,11 +44,11 @@ class _RegistrationState extends State<Registration> {
                   SizedBox(
                     height: height * 0.007,
                   ),
-                  const Text(
+                  Text(
                     "Register ",
                     style: TextStyle(
-                        color: Color.fromARGB(255, 255, 255, 255),
-                        fontSize: 40),
+                        color: const Color.fromARGB(255, 255, 255, 255),
+                        fontSize: width * 0.08),
                   ),
                   Padding(
                       padding: EdgeInsets.only(

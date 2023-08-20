@@ -31,18 +31,24 @@ class AutoRegisterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final width = size.width;
+
     switch (type) {
       case AutoRegisterButtonType.facebook:
         return AutoRegisterButton.customized(
-          icon: const Icon(
+          icon: Icon(
             Icons.facebook_outlined,
             color: Colors.white,
-            size: 33,
+            size: width * 0.07,
           ),
           color: Colors.blue,
-          buttonText: const Text(
+          buttonText: Text(
             "Continue with Facebook",
-            style: TextStyle(color: Colors.white, fontSize: 18),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: (MediaQuery.of(context).size.width * 0.7) / 16,
+            ),
           ),
           onTap: () async {
             AuthAPI.signInWithFacebook();
@@ -56,9 +62,11 @@ class AutoRegisterButton extends StatelessWidget {
             height: MediaQuery.of(context).size.width * 0.07,
           ),
           color: Colors.white,
-          buttonText: const Text(
+          buttonText: Text(
             "Continue with Google",
-            style: TextStyle(color: Colors.black, fontSize: 18),
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: (MediaQuery.of(context).size.width * 0.7) / 16),
           ),
           onTap: () {
             AuthAPI.signInWithGoogle();

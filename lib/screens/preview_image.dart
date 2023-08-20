@@ -253,24 +253,29 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
               width: width * 0.95,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 15, top: 8.0),
-            child: Row(
-              children: [
-                ModifAiFunctionsButtons.type(
-                  type: ModifAiFunctionsButtonsType.cropper,
-                  photoId: photoId,
-                  isUploaded: isUploaded,
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 15.0),
+              child: SizedBox(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ModifAiFunctionsButtons.type(
+                      type: ModifAiFunctionsButtonsType.cropper,
+                      photoId: photoId,
+                      isUploaded: isUploaded,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: ModifAiFunctionsButtons.type(
+                        type: ModifAiFunctionsButtonsType.removebg,
+                        photoId: photoId,
+                        isUploaded: isUploaded,
+                      ),
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: ModifAiFunctionsButtons.type(
-                    type: ModifAiFunctionsButtonsType.removebg,
-                    photoId: photoId,
-                    isUploaded: isUploaded,
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
           Padding(

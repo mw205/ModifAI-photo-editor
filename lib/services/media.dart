@@ -25,8 +25,10 @@ class Media {
     Map<String, String> headers;
     debugPrint(
         "this is token from media file:${preferences.getString("access_token")}");
+    AuthAPI.loginDemo();
     if (preferences.getString("access_token") == null) {
       AuthAPI.getModifaiAccessToken();
+
       headers = {
         'Accept': 'application/json',
         'Authorization': 'Bearer ${preferences.getString("access_token")}'
@@ -127,6 +129,7 @@ class Media {
         .post(url, headers: await getAccessToken(), body: {'id': photoId});
     try {
       Map<String, dynamic> responseMap = jsonDecode(request.body);
+
       String? mediaUrl = responseMap['media_url'];
       return mediaUrl;
     } catch (e) {

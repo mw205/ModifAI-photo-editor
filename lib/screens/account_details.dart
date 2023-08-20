@@ -24,7 +24,10 @@ class _AccountDetailsState extends State<AccountDetails> {
   @override
   void initState() {
     super.initState();
-    _nameController.text = FirebaseAuth.instance.currentUser!.displayName ?? '';
+    if (FirebaseAuth.instance.currentUser != null) {
+      _nameController.text =
+          FirebaseAuth.instance.currentUser!.displayName ?? '';
+    }
   }
 
   @override
@@ -121,14 +124,23 @@ class _AccountDetailsState extends State<AccountDetails> {
                     ),
                     ChangeDetailsButton(
                       onTap: () {
-                        setState(() {
-                          _isEditingName = true;
-                          _nameController.text =
-                              FirebaseAuth.instance.currentUser!.displayName ??
-                                  '';
-                        });
+                        if (FirebaseAuth.instance.currentUser == null) {
+                          Get.snackbar(
+                            "Alert",
+                            "This account is for demo version this feature is disabled",
+                            colorText: Colors.white,
+                            snackPosition: SnackPosition.BOTTOM,
+                          );
+                        } else {
+                          setState(() {
+                            _isEditingName = true;
+                            _nameController.text = FirebaseAuth
+                                    .instance.currentUser!.displayName ??
+                                '';
+                          });
+                        }
                       },
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -140,8 +152,7 @@ class _AccountDetailsState extends State<AccountDetails> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
-                child: 
-                Row(
+                child: Row(
                   children: [
                     const Padding(
                       padding: EdgeInsets.only(
@@ -157,7 +168,9 @@ class _AccountDetailsState extends State<AccountDetails> {
                       width: width * 0.159,
                     ),
                     Text(
-                      FirebaseAuth.instance.currentUser!.email!,
+                      (FirebaseAuth.instance.currentUser != null)
+                          ? FirebaseAuth.instance.currentUser!.email!
+                          : 'demoGust@demo.com',
                       style: TextStyle(
                           color: Colors.white, fontSize: height * 0.021),
                     ),

@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:modifai/screens/home.dart';
 import 'package:modifai/screens/preview_image.dart';
+import 'package:modifai/services/authentication.dart';
 import 'package:modifai/services/media.dart';
 
 import 'registration.dart';
@@ -32,14 +33,14 @@ class _SplashScreenState extends State<SplashScreen> {
     be shown and the user can skip this operation
     */
     Media.addPermissions().whenComplete(() async {
-      Future.delayed(const Duration(seconds: 2), () {
+      Future.delayed(const Duration(seconds: 2), () async {
         if (widget.imageReceived != null) {
-          
           ImageViewerScreen.file(
             file: widget.imageReceived,
           );
         } else {
-          if (FirebaseAuth.instance.currentUser != null) {
+          if (FirebaseAuth.instance.currentUser != null ||
+              await AuthAPI.loginDemo() == true) {
             Get.offAll(() => const Home());
           } else {
             Get.offAll(() => const Registration());

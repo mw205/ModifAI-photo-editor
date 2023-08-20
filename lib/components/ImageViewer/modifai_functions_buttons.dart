@@ -103,8 +103,7 @@ class _ModifAiFunctionsButtonsState extends State<ModifAiFunctionsButtons> {
               mediaUrl = await Media.cropping(photoId: widget.photoId!);
               if (mediaUrl != null) {
                 Get.back();
-                if (isAdLoaded &&
-                    Theme.of(context).platform == TargetPlatform.android) {
+                if (isAdLoaded) {
                   Get.back();
                   await interstitialAd.show();
                   Get.to(() => ShowOutputImage(mediaUrl: mediaUrl!));
@@ -155,8 +154,7 @@ class _ModifAiFunctionsButtonsState extends State<ModifAiFunctionsButtons> {
               mediaUrl = await Media.removerbg(photoId: widget.photoId!);
               if (mediaUrl != null) {
                 Get.back();
-                if (isAdLoaded &&
-                    Theme.of(context).platform == TargetPlatform.android) {
+                if (isAdLoaded) {
                   Get.back();
                   await interstitialAd.show();
                   Get.to(() => ShowOutputImage(mediaUrl: mediaUrl!));
@@ -207,8 +205,8 @@ class _ModifAiFunctionsButtonsState extends State<ModifAiFunctionsButtons> {
             } else {
               DialogUtils.modifAiProgressindicator();
               mediaUrl = await Media.getMedia(photoId: widget.photoId!);
+              Get.back();
               if (mediaUrl != null) {
-                Get.back();
                 Get.to(() => ModifAiBotPage(
                       mediaUrl: mediaUrl!,
                       photoId: widget.photoId!,

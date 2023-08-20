@@ -17,15 +17,24 @@ class _DeleteAccountButtonState extends State<DeleteAccountButton> {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () async {
-        DialogUtils.modifAiProgressindicator();
-        await FirebaseAuth.instance.currentUser!.delete();
-        Get.offAll(() => const Registration());
-        Get.snackbar(
-          "Alert",
-          "Your account is deleted now, please register to access all the features",
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-        );
+        if (FirebaseAuth.instance.currentUser != null) {
+          DialogUtils.modifAiProgressindicator();
+          await FirebaseAuth.instance.currentUser!.delete();
+          Get.offAll(() => const Registration());
+          Get.snackbar(
+            "Alert",
+            "Your account is deleted now, please register to access all the features",
+            colorText: Colors.white,
+            snackPosition: SnackPosition.BOTTOM,
+          );
+        } else {
+          Get.snackbar(
+            "Alert",
+            "This account is for demo version this feature is disabled",
+            colorText: Colors.white,
+            snackPosition: SnackPosition.BOTTOM,
+          );
+        }
       },
       child: const Text(
         'Delete Account',

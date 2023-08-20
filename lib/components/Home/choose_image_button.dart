@@ -46,7 +46,6 @@ class _ChooseImageButtonState extends State<ChooseImageButton> {
     super.initState();
   }
 
-
   Future<void> _showSearchDialog() async {
     final TextEditingController textEditingController = TextEditingController();
     return showDialog<void>(
@@ -57,7 +56,7 @@ class _ChooseImageButtonState extends State<ChooseImageButton> {
           backgroundColor: const Color.fromARGB(255, 10, 45, 52),
           title: const Text(
             'Search',
-            style: TextStyle(fontSize: 23, color: Color(0xff0f969c)),
+            style: TextStyle(fontSize: 25, color: Color(0xff0f969c)),
           ),
           content: SizedBox(
             width: MediaQuery.of(context).size.width,
@@ -66,12 +65,16 @@ class _ChooseImageButtonState extends State<ChooseImageButton> {
                 textFieldType: ModifAiBotTextFieldType.search),
           ),
           actions: <Widget>[
-            const CancelButton(),
-            SearchButton(imgUrl: textEditingController.text),
-            Padding(
-              padding: const EdgeInsets.only(right: 45.0),
-              child: PasteButton(
-                textEditingController: textEditingController,
+            SizedBox(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const CancelButton(),
+                  SearchButton(imgUrl: textEditingController.text),
+                  PasteButton(
+                    textEditingController: textEditingController,
+                  ),
+                ],
               ),
             ),
           ],
@@ -140,7 +143,8 @@ class _ChooseImageButtonState extends State<ChooseImageButton> {
               style: TextStyle(fontSize: 25, color: Colors.white)),
           lottie: LottieBuilder.asset(
               "assets/animation/Gallery Animation-77382-photo.json",
-              height: height * 0.157),
+              height: height * 0.157,
+              fit: BoxFit.contain),
           onTap: () async {
             if (await Permission.photos.request().isGranted == true ||
                 await Permission.storage.request().isGranted == true) {

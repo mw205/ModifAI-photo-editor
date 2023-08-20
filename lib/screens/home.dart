@@ -108,8 +108,10 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
               ],
             ),
             Stack(
-              children:[LottieBuilder.asset(
-                  "assets/animation/90531-thin-background-lines-stripes-loop.json")] ,
+              children: [
+                LottieBuilder.asset(
+                    "assets/animation/90531-thin-background-lines-stripes-loop.json")
+              ],
             )
           ],
         ),

@@ -1,5 +1,5 @@
 class AdsManager {
-  static const bool testMode = false;
+  static const bool testMode = true;
   static String get homeBannerAdId {
     if (testMode == true) {
       return "ca-app-pub-3940256099942544/6300978111";

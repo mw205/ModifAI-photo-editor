@@ -96,8 +96,7 @@ class _SendButtonState extends State<SendButton> {
             );
             Get.back();
             if (mediaURL != null) {
-              if (isAdLoaded &&
-                  Theme.of(context).platform == TargetPlatform.android) {
+              if (isAdLoaded) {
                 await interstitialAd!.show();
                 Get.to(() => ShowOutputImage(mediaUrl: mediaURL!));
               } else {
