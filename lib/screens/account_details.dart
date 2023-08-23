@@ -124,21 +124,12 @@ class _AccountDetailsState extends State<AccountDetails> {
                     ),
                     ChangeDetailsButton(
                       onTap: () {
-                        if (FirebaseAuth.instance.currentUser == null) {
-                          Get.snackbar(
-                            "Alert",
-                            "This account is for demo version this feature is disabled",
-                            colorText: Colors.white,
-                            snackPosition: SnackPosition.BOTTOM,
-                          );
-                        } else {
-                          setState(() {
-                            _isEditingName = true;
-                            _nameController.text = FirebaseAuth
-                                    .instance.currentUser!.displayName ??
-                                '';
-                          });
-                        }
+                        setState(() {
+                          _isEditingName = true;
+                          _nameController.text =
+                              FirebaseAuth.instance.currentUser!.displayName ??
+                                  '';
+                        });
                       },
                     ),
                   ],
@@ -168,9 +159,7 @@ class _AccountDetailsState extends State<AccountDetails> {
                       width: width * 0.159,
                     ),
                     Text(
-                      (FirebaseAuth.instance.currentUser != null)
-                          ? FirebaseAuth.instance.currentUser!.email!
-                          : 'demoGust@demo.com',
+                      FirebaseAuth.instance.currentUser!.email!,
                       style: TextStyle(
                           color: Colors.white, fontSize: height * 0.021),
                     ),

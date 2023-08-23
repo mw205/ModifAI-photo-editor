@@ -27,13 +27,6 @@ class _LogoutButtonState extends State<LogoutButton> {
             colorText: Colors.white,
             snackPosition: SnackPosition.BOTTOM,
           );
-        } else {
-          Get.snackbar(
-            "Alert",
-            "This account is for demo version this feature is disabled",
-            colorText: Colors.white,
-            snackPosition: SnackPosition.BOTTOM,
-          );
         }
       },
       child: const Text(

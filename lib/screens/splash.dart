@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:modifai/screens/home.dart';
 import 'package:modifai/screens/preview_image.dart';
-import 'package:modifai/services/authentication.dart';
 import 'package:modifai/services/media.dart';
 
 import 'registration.dart';
@@ -39,8 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
             file: widget.imageReceived,
           );
         } else {
-          if (FirebaseAuth.instance.currentUser != null ||
-              await AuthAPI.loginDemo() == true) {
+          if (FirebaseAuth.instance.currentUser != null) {
             Get.offAll(() => const Home());
           } else {
             Get.offAll(() => const Registration());

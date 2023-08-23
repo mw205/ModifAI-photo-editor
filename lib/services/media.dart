@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -23,24 +24,25 @@ class Media {
   static Future<Map<String, String>> getAccessToken() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     Map<String, String> headers;
-    debugPrint(
-        "this is token from media file:${preferences.getString("access_token")}");
-    AuthAPI.loginDemo();
-    if (preferences.getString("access_token") == null) {
-      AuthAPI.getModifaiAccessToken();
-
-      headers = {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ${preferences.getString("access_token")}'
-      };
-      Get.back();
+    if (FirebaseAuth.instance.currentUser != null) {
+      if (preferences.getString("access_token") == null) {
+        AuthAPI.getModifaiAccessToken();
+        headers = {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${preferences.getString("access_token")}'
+        };
+        Get.back();
+      } else {
+        headers = {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${AuthAPI.getModifaiAccessToken()}'
+        };
+      }
+      return headers;
     } else {
-      headers = {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ${preferences.getString("access_token")}',
-      };
+      headers = {'Accept': 'application/json'};
+      return headers;
     }
-    return headers;
   }
 
   static Future<String> uploadImage({
@@ -86,6 +88,7 @@ class Media {
       final String responseBody;
       responseBody = await uploadResponse.stream.bytesToString();
       Map<String, dynamic>? responseMap;
+   
       try {
         responseMap = jsonDecode(responseBody);
         if (uploadResponse.statusCode == 200) {
@@ -110,8 +113,15 @@ class Media {
 
   static Future<String?> removerbg({required String photoId}) async {
     final url = Uri.parse("$baseApi$models$removebg$photoId");
-    final request = await http
-        .post(url, headers: await getAccessToken(), body: {'id': photoId});
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    Map<String, dynamic> body;
+    if (FirebaseAuth.instance.currentUser == null) {
+      body = {'id': photoId, "folderId": preferences.getString("guestId")};
+    } else {
+      body = {'id': photoId};
+    }
+    final request =
+        await http.post(url, headers: await getAccessToken(), body: body);
 
     try {
       Map<String, dynamic> responseMap = jsonDecode(request.body);
@@ -125,8 +135,15 @@ class Media {
   static Future<String?> cropping({required String photoId}) async {
     final url = Uri.parse("$baseApi$models$cropper$photoId");
 
-    final request = await http
-        .post(url, headers: await getAccessToken(), body: {'id': photoId});
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    Map<String, dynamic> body;
+    if (FirebaseAuth.instance.currentUser == null) {
+      body = {'id': photoId, "folderId": preferences.getString("guestId")};
+    } else {
+      body = {'id': photoId};
+    }
+    final request =
+        await http.post(url, headers: await getAccessToken(), body: body);
     try {
       Map<String, dynamic> responseMap = jsonDecode(request.body);
 
@@ -155,11 +172,19 @@ class Media {
       {required String photoId,
       required String prompt,
       required String mask}) async {
-    String botURL = "$baseApi$models$editor$photoId&text=$prompt&mask=$mask";
+    final botURL =
+        Uri.parse("$baseApi$models$editor$photoId&text=$prompt&mask=$mask");
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    Map<String, dynamic> body;
+    if (FirebaseAuth.instance.currentUser == null) {
+      body = {'id': photoId, "folderId": preferences.getString("guestId")};
+    } else {
+      body = {'id': photoId};
+    }
     final request =
-        await http.post(Uri.parse(botURL), headers: await getAccessToken());
-    String? photo;
+        await http.post(botURL, headers: await getAccessToken(), body: body);
 
+    String? photo;
     if (request.statusCode == 200) {
       Map<String, dynamic> responseMap = jsonDecode(request.body);
       photo = responseMap['media_url'];

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:modifai/components/Registeration/skip_button.dart';
 
 import '../components/Registeration/auto_register_button.dart';
 
@@ -31,6 +32,7 @@ class _RegistrationState extends State<Registration> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  const SkipButton(),
                   Container(
                     width: width,
                     height: height * .30,
