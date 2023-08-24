@@ -26,7 +26,7 @@ class Media {
     Map<String, String> headers;
     if (FirebaseAuth.instance.currentUser != null) {
       if (preferences.getString("access_token") == null) {
-        AuthAPI.getModifaiAccessToken();
+        //AuthAPI.getModifaiAccessToken();
         headers = {
           'Accept': 'application/json',
           'Authorization': 'Bearer ${preferences.getString("access_token")}'
@@ -55,8 +55,15 @@ class Media {
     }
 
     String id;
+    SharedPreferences preferences = await SharedPreferences.getInstance();
 
-    final url = Uri.parse("$baseApi$media");
+    Uri url;
+    if (FirebaseAuth.instance.currentUser == null) {
+      url = Uri.parse(
+          "$baseApi$media?folderId=${preferences.getString("guestId")}");
+    } else {
+      url = Uri.parse("$baseApi$media");
+    }
     Uint8List? toUploadImagesBytes;
     String? toUploadFileName;
     if (xFile != null) {
@@ -115,14 +122,12 @@ class Media {
     } else {
       url = Uri.parse("$baseApi$models$removebg$photoId");
     }
-
-    Map<String, dynamic> body;
-    if (FirebaseAuth.instance.currentUser == null) {
-      body = {'id': photoId};
-    } else {
-      body = {'id': photoId};
-    }
-    request = await http.post(url, headers: await getAccessToken(), body: body);
+    // Map<String, dynamic> body;
+    // body = {'id': photoId};
+    request = await http.post(
+      url, headers: await getAccessToken(),
+      // body: body
+    );
 
     try {
       Map<String, dynamic> responseMap = jsonDecode(request.body);
@@ -141,16 +146,12 @@ class Media {
       url = Uri.parse(
           "$baseApi$models$cropper$photoId&folderId=${preferences.getString("guestId")}");
     } else {
-      url = Uri.parse("$baseApi$models$removebg$photoId");
+      url = Uri.parse("$baseApi$models$cropper$photoId");
     }
+    request = await http.post(url, headers: await getAccessToken()
+        //body: body
+        );
 
-    Map<String, dynamic> body;
-    if (FirebaseAuth.instance.currentUser == null) {
-      body = {'id': photoId};
-    } else {
-      body = {'id': photoId};
-    }
-    request = await http.post(url, headers: await getAccessToken(), body: body);
     try {
       Map<String, dynamic> responseMap = jsonDecode(request.body);
 
@@ -162,11 +163,19 @@ class Media {
   }
 
   static Future<String?> getMedia({required String photoId}) async {
-    String getMediaUrl = "$baseApi$media/$photoId";
+    Uri getMediaUrl;
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    if (FirebaseAuth.instance.currentUser == null) {
+      getMediaUrl = Uri.parse(
+          "$baseApi$media/$photoId?folderId=${preferences.getString("guestId")}");
+    } else {
+      getMediaUrl = Uri.parse("$baseApi$media/$photoId");
+    }
 
     String? mediaUrl;
     final response =
-        await http.get(Uri.parse(getMediaUrl), headers: await getAccessToken());
+        await http.get(getMediaUrl, headers: await getAccessToken());
     Map<String, dynamic> respnseMap = jsonDecode(response.body);
     if (response.statusCode == 200) {
       mediaUrl = respnseMap['media']['url'];
@@ -187,9 +196,7 @@ class Media {
       botURL = Uri.parse(
           "$baseApi$models$editor$photoId&text=$prompt&mask=$mask&folderId=${preferences.getString("guestId")}");
     }
-    Map<String, dynamic> body = {'id': photoId};
-    final request =
-        await http.post(botURL, headers: await getAccessToken(), body: body);
+    final request = await http.post(botURL, headers: await getAccessToken());
 
     String? photo;
     if (request.statusCode == 200) {
