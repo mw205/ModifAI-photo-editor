@@ -14,12 +14,12 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Media {
-  static const baseApi = "https://modifai.onrender.com/api";
-  static const String media = "/media";
-  static const models = "/models";
-  static const removebg = "/remover?id=";
-  static const cropper = "/cropper?id=";
-  static const editor = "/editor?id=";
+  static String get baseApi => "https://modifai.onrender.com/api";
+  static String get media => "/media";
+  static String get models => "/models";
+  static String get removebg => "/remover?id=";
+  static String get cropper => "/cropper?id=";
+  static String get editor => "/editor?id=";
 
   static Future<Map<String, String>> getAccessToken() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -122,11 +122,8 @@ class Media {
     } else {
       url = Uri.parse("$baseApi$models$removebg$photoId");
     }
-    // Map<String, dynamic> body;
-    // body = {'id': photoId};
     request = await http.post(
       url, headers: await getAccessToken(),
-      // body: body
     );
 
     try {

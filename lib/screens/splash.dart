@@ -26,17 +26,20 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    /* it was necessary to add permissions to be ready as a user to use all features of the app and when this
-    process is completed then we have three paths if there is an image received then we will go and show it in the
-    image viewer screen else we will go to home screen if the user is signed in else then the image of registration will
-    be shown and the user can skip this operation
-    */
+    /*if user is registered then go to home page
+    and if there is a shared image then direct him to the image viewer screen
+    else go to registeration page*/
+    direct();
+    super.initState();
+  }
+
+  void direct() {
     Media.addPermissions().whenComplete(() async {
       Future.delayed(const Duration(seconds: 2), () async {
         if (widget.imageReceived != null) {
-          ImageViewerScreen.file(
-            file: widget.imageReceived,
-          );
+          Get.to(() => ImageViewerScreen.file(
+                file: widget.imageReceived,
+              ));
         } else {
           if (FirebaseAuth.instance.currentUser != null) {
             Get.offAll(() => const Home());
@@ -46,7 +49,6 @@ class _SplashScreenState extends State<SplashScreen> {
         }
       });
     });
-    super.initState();
   }
 
   @override

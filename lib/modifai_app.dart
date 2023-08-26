@@ -1,10 +1,7 @@
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:modifai/screens/preview_image.dart';
-import 'package:modifai/screens/registration.dart';
 import 'package:modifai/screens/splash.dart';
 import 'package:share_handler/share_handler.dart';
 
@@ -37,7 +34,7 @@ class _ModifAiAppState extends State<ModifAiApp> {
   }
 
   Future<void> _handleSharedMedia(media) async {
-    // here we will check if the attachments are not null and there is one image at least
+    //  if the attachments are not null and there is one image at least
     if (media.attachments != null &&
         media.attachments!.any(
             (attachment) => attachment?.type == SharedAttachmentType.image)) {
@@ -51,20 +48,6 @@ class _ModifAiAppState extends State<ModifAiApp> {
       setState(() {
         _sharedMedia = media;
       });
-
-      if (FirebaseAuth.instance.currentUser != null) {
-        Get.to(() => ImageViewerScreen.file(
-              file: file,
-            ));
-      } else {
-        Get.offAll(() => const Registration());
-        Get.snackbar(
-          "Alert",
-          "You should be signed-in to access all services",
-          colorText: Colors.white,
-          snackPosition: SnackPosition.TOP,
-        );
-      }
     } else {
       //to ensure that the app woll not deal with links that dosn't have photos
       Get.snackbar(
@@ -92,18 +75,11 @@ class _ModifAiAppState extends State<ModifAiApp> {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: _sharedMedia != null &&
-              _sharedMedia!.attachments != null &&
-              _sharedMedia!.attachments!.any((attachment) =>
-                  attachment?.type == SharedAttachmentType.image)
+      home: sharedisImage()
           ? SplashScreen.handleSharedMedia(
-              imageReceived: File(_sharedMedia!.attachments!
-                  .firstWhere((attachment) =>
-                      attachment?.type == SharedAttachmentType.image)!
-                  .path),
+              imageReceived: fileHandled(),
             )
           : const SplashScreen(),
-
       theme: ThemeData(
         useMaterial3: true,
         fontFamily: "Lato",
@@ -114,5 +90,19 @@ class _ModifAiAppState extends State<ModifAiApp> {
         indicatorColor: const Color(0xff6da5c0),
       ),
     );
+  }
+
+  File fileHandled() {
+    return File(_sharedMedia!.attachments!
+        .firstWhere(
+            (attachment) => attachment?.type == SharedAttachmentType.image)!
+        .path);
+  }
+
+  bool sharedisImage() {
+    return _sharedMedia != null &&
+        _sharedMedia!.attachments != null &&
+        _sharedMedia!.attachments!.any(
+            (attachment) => attachment?.type == SharedAttachmentType.image);
   }
 }
