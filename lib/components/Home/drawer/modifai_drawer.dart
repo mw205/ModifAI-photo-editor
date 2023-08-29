@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modifai/screens/account_details.dart';
 import 'package:modifai/screens/registration.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../screens/about_modifai_screen.dart';
@@ -24,7 +25,7 @@ class _ModifAIDrawerState extends State<ModifAIDrawer> {
   Future<void> _launchAppPageOnAppStore() async {
     try {
       launchUrl(Uri.parse(
-          'https://play.google.com/store/apps/details?id=com.modifai.photoeditor'));
+          'https://play.google.com/store/apps/details?id=com.modifai.photoeditor&pcampaignid=web_share'));
     } catch (e) {
       launchUrl(Uri.parse("https://modifai.onrender.com/"));
     }
@@ -75,8 +76,9 @@ class _ModifAIDrawerState extends State<ModifAIDrawer> {
               'Share with your friends',
               style: TextStyle(fontSize: 20, color: Color(0xff6da5c0)),
             ),
-            onTap: () {
-              _launchAppPageOnAppStore();
+            onTap: () async {
+              await Share.share(
+                  'https://play.google.com/store/apps/details?id=com.modifai.photoeditor&pcampaignid=web_share');
             },
           ),
           ListTile(

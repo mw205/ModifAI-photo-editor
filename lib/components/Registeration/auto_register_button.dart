@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:modifai/screens/login_page.dart';
 import 'package:modifai/services/authentication.dart';
 
-enum AutoRegisterButtonType { facebook, google }
+enum AutoRegisterButtonType { password, google }
 
 class AutoRegisterButton extends StatelessWidget {
   late final Color? color;
@@ -35,23 +37,24 @@ class AutoRegisterButton extends StatelessWidget {
     final width = size.width;
 
     switch (type) {
-      case AutoRegisterButtonType.facebook:
+      case AutoRegisterButtonType.password:
         return AutoRegisterButton.customized(
           icon: Icon(
-            Icons.facebook_outlined,
-            color: Colors.white,
-            size: width * 0.07,
+            Icons.person,
+            color: Colors.black,
+            size: width * 0.06,
           ),
-          color: Colors.blue,
+          color: Colors.white,
           buttonText: Text(
-            "Continue with Facebook",
+            "Continue with Email & Password",
             style: TextStyle(
-              color: Colors.white,
-              fontSize: (MediaQuery.of(context).size.width * 0.7) / 16,
+              color: Colors.black,
+              fontSize: (MediaQuery.of(context).size.width * 0.7) / 16.75,
             ),
           ),
           onTap: () async {
-            AuthAPI.signInWithFacebook();
+            Get.to(const LoginPage());
+            // AuthAPI.signInWithFacebook();
           },
         );
       case AutoRegisterButtonType.google:
@@ -69,7 +72,7 @@ class AutoRegisterButton extends StatelessWidget {
                 fontSize: (MediaQuery.of(context).size.width * 0.7) / 16),
           ),
           onTap: () {
-            AuthAPI.signInWithGoogle();
+            Authentication.signInWithGoogle();
           },
         );
       default:
@@ -79,9 +82,18 @@ class AutoRegisterButton extends StatelessWidget {
           },
           child: Container(
             height: MediaQuery.of(context).size.height * 0.06,
-            width: MediaQuery.of(context).size.width * 0.7,
+            width: MediaQuery.of(context).size.width * 0.75,
             decoration: BoxDecoration(
-              color: color,
+              boxShadow: [
+                BoxShadow(
+                  color: const Color.fromARGB(255, 255, 255, 255)
+                      .withOpacity(0.125),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+              color: const Color.fromARGB(255, 246, 246, 246),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Padding(

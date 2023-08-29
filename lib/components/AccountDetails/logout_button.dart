@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modifai/components/ImageViewer/modifai_progress_indicator.dart';
+import 'package:modifai/components/confirmation_dialog.dart';
 
 import '../../screens/registration.dart';
 
@@ -17,17 +18,21 @@ class _LogoutButtonState extends State<LogoutButton> {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () async {
-        if (FirebaseAuth.instance.currentUser != null) {
-          DialogUtils.modifAiProgressindicator();
-          await FirebaseAuth.instance.signOut();
-          Get.offAll(() => const Registration());
-          Get.snackbar(
-            "Alert",
-            "You are not signed in now, please register to access all the features",
-            colorText: Colors.white,
-            snackPosition: SnackPosition.BOTTOM,
-          );
-        }
+        Get.dialog(ConfirmationDialog(
+          onConfirm: () async {
+            if (FirebaseAuth.instance.currentUser != null) {
+              DialogUtils.modifAiProgressindicator();
+              await FirebaseAuth.instance.signOut();
+              Get.offAll(() => const Registration());
+              Get.snackbar(
+                "Alert",
+                "You are not signed in now, please register to access all the features",
+                colorText: Colors.white,
+                snackPosition: SnackPosition.BOTTOM,
+              );
+            }
+          },
+        ));
       },
       child: const Text(
         'Logout',

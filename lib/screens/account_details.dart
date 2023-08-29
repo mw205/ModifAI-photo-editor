@@ -113,7 +113,8 @@ class _AccountDetailsState extends State<AccountDetails> {
                               ),
                             )
                           : Text(
-                              (FirebaseAuth.instance.currentUser != null)
+                              (FirebaseAuth.instance.currentUser!.displayName !=
+                                      null)
                                   ? FirebaseAuth
                                       .instance.currentUser!.displayName!
                                   : 'No name',

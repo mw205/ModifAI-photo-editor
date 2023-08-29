@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:modifai/screens/preview_image.dart';
 import 'package:modifai/screens/splash.dart';
 import 'package:share_handler/share_handler.dart';
 
@@ -27,59 +28,54 @@ class _ModifAiAppState extends State<ModifAiApp> {
     if (initialMedia != null) {
       await _handleSharedMedia(initialMedia);
     }
-//this is used to check if there are shared media when the app is in the memory
     handler.sharedMediaStream.listen((SharedMedia media) async {
       await _handleSharedMedia(media);
     });
   }
 
-  Future<void> _handleSharedMedia(media) async {
-    //  if the attachments are not null and there is one image at least
+  Future<void> _handleSharedMedia(SharedMedia media) async {
     if (media.attachments != null &&
         media.attachments!.any(
             (attachment) => attachment?.type == SharedAttachmentType.image)) {
-      // if this condition is true then will convert the first shared image to a file from its path"if there are more than
-      //  an image will take the first one" , then take the image's file and pass it to image view screen to show it there
+      List<File> sharedImageFiles = [];
 
-      final file = File(media.attachments!
-          .firstWhere(
-              (attachment) => attachment?.type == SharedAttachmentType.image)!
-          .path);
-      setState(() {
-        _sharedMedia = media;
-      });
+      for (SharedAttachment? attachment in media.attachments!) {
+        if (attachment?.type == SharedAttachmentType.image) {
+          final file = File(attachment!.path);
+          sharedImageFiles.add(file);
+        }
+      }
+
+      if (sharedImageFiles.isNotEmpty) {
+        setState(() {
+          _sharedMedia = media;
+        });
+        // Pass the list of shared image files to the ImageViewerScreen
+        Get.to(ImageViewerScreen.file(file: sharedImageFiles.first));
+      }
     } else {
-      //to ensure that the app woll not deal with links that dosn't have photos
       Get.snackbar(
         "Alert",
-        "Please share images only!!",
+        "Invalid Shared Media !!",
         colorText: Colors.white,
         snackPosition: SnackPosition.TOP,
       );
     }
   }
 
-//this function will deal with links and return true only if the link has a photo
-  bool isReceivedMediaAnimage() {
-    if (_sharedMedia != null &&
+  bool isReceivedMediaAnImage() {
+    return _sharedMedia != null &&
         _sharedMedia!.attachments != null &&
         _sharedMedia!.attachments!.any(
-            (attachment) => attachment?.type == SharedAttachmentType.image)) {
-      return true;
-    } else {
-      return false;
-    }
+            (attachment) => attachment?.type == SharedAttachmentType.image);
   }
 
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+  // Disable automatic disposal of inactive pages
       debugShowCheckedModeBanner: false,
-      home: sharedisImage()
-          ? SplashScreen.handleSharedMedia(
-              imageReceived: fileHandled(),
-            )
-          : const SplashScreen(),
+      home: const SplashScreen(),
       theme: ThemeData(
         useMaterial3: true,
         fontFamily: "Lato",
@@ -91,18 +87,19 @@ class _ModifAiAppState extends State<ModifAiApp> {
       ),
     );
   }
-
-  File fileHandled() {
-    return File(_sharedMedia!.attachments!
-        .firstWhere(
-            (attachment) => attachment?.type == SharedAttachmentType.image)!
-        .path);
-  }
-
-  bool sharedisImage() {
-    return _sharedMedia != null &&
-        _sharedMedia!.attachments != null &&
-        _sharedMedia!.attachments!.any(
-            (attachment) => attachment?.type == SharedAttachmentType.image);
-  }
 }
+
+//   File fileHandled() {
+//     return File(_sharedMedia!.attachments!
+//         .firstWhere(
+//             (attachment) => attachment?.type == SharedAttachmentType.image)!
+//         .path);
+//   }
+
+//   bool sharedisImage() {
+//     return _sharedMedia != null &&
+//         _sharedMedia!.attachments != null &&
+//         _sharedMedia!.attachments!.any(
+//             (attachment) => attachment?.type == SharedAttachmentType.image);
+//   }
+// }

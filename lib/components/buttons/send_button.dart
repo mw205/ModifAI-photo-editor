@@ -82,20 +82,14 @@ class _SendButtonState extends State<SendButton> {
               snackPosition: SnackPosition.BOTTOM,
             );
           } else {
-            Get.snackbar(
-              "Alert",
-              "Your photo is being edited now and will take a while, please wait ",
-              colorText: Colors.white,
-              snackPosition: SnackPosition.BOTTOM,
-            );
             DialogUtils.modifAiProgressindicator();
             mediaURL = await Media.modifAIBot(
               prompt: widget.promptText!,
               mask: widget.selectText!,
               photoId: widget.photoId!,
             );
-            Get.back();
             if (mediaURL != null) {
+              Get.back();
               if (isAdLoaded) {
                 await interstitialAd!.show();
                 Get.to(() => ShowOutputImage(mediaUrl: mediaURL!));

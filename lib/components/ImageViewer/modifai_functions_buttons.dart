@@ -205,8 +205,8 @@ class _ModifAiFunctionsButtonsState extends State<ModifAiFunctionsButtons> {
             } else {
               DialogUtils.modifAiProgressindicator();
               mediaUrl = await Media.getMedia(photoId: widget.photoId!);
-              Get.back();
               if (mediaUrl != null) {
+                Get.back();
                 Get.to(() => ModifAiBotPage(
                       mediaUrl: mediaUrl!,
                       photoId: widget.photoId!,

@@ -6,11 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modifai/components/ImageViewer/modifai_progress_indicator.dart';
+import 'package:modifai/controller/login_controller.dart';
+import 'package:modifai/services/media.dart';
 
 import 'modifai_change_detail_button.dart';
 
 class ProfilePhoto extends StatefulWidget {
-  const ProfilePhoto({super.key});
+  final bool? isSignUP;
+  const ProfilePhoto({super.key, this.isSignUP});
 
   @override
   _ProfilePhotoState createState() => _ProfilePhotoState();
@@ -20,7 +23,7 @@ final ImagePicker picker = ImagePicker();
 
 class _ProfilePhotoState extends State<ProfilePhoto> {
   dynamic photo;
-
+  LoginController myController = Get.find<LoginController>();
   @override
   void initState() {
     super.initState();
@@ -49,6 +52,22 @@ class _ProfilePhotoState extends State<ProfilePhoto> {
       final User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
         await user.updatePhotoURL(url);
+        setState(() {
+          photo = NetworkImage(url);
+        });
+        Get.back();
+      }
+    }
+  }
+
+  takePhoto() async {
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      DialogUtils.modifAiProgressindicator();
+      String? url =
+          await Media.uploadImage(xFile: image, uploadProfilePhoto: true);
+      if (url != "") {
+        myController.setProfilePhotoUrl(url);
         setState(() {
           photo = NetworkImage(url);
         });
@@ -89,6 +108,8 @@ class _ProfilePhotoState extends State<ProfilePhoto> {
             onTap: () {
               if (FirebaseAuth.instance.currentUser != null) {
                 changePhoto();
+              } else if (widget.isSignUP == true) {
+                takePhoto();
               } else {
                 Get.snackbar(
                   "Alert",

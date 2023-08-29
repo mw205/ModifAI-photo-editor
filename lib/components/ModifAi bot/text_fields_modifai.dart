@@ -44,7 +44,7 @@ class _ModifAiTextFieldState extends State<ModifAiTextField> {
       case ModifAiBotTextFieldType.select:
         return ModifAiTextField.customized(
           labelText: 'Select what you want to change',
-          hintText: "tell the bot what is the the thing you want to change",
+          hintText: "Tell the bot what is the thing you want to change",
           maxLines: 1,
           textEditingController: widget.textEditingController,
           suffixIcon: Padding(
@@ -58,7 +58,8 @@ class _ModifAiTextFieldState extends State<ModifAiTextField> {
         return ModifAiTextField.customized(
           textEditingController: widget.textEditingController,
           labelText: "Enter a prompt",
-          hintText: "tell the bot what you want to change",
+          hintText:
+              "Describe to the bot what you want to change in your selection",
           maxLength: 500,
           maxLines: 3,
           suffixIcon: widget.suffixIcon,
@@ -70,7 +71,6 @@ class _ModifAiTextFieldState extends State<ModifAiTextField> {
             maxLines: 1);
       default:
         return TextFormField(
-        
           maxLines: widget.maxLines,
           maxLength: widget.maxLength,
           textAlignVertical: TextAlignVertical.top,

@@ -56,7 +56,7 @@ class _RegistrationState extends State<Registration> {
                       padding: EdgeInsets.only(
                           right: width * 0.04, top: height * 0.05),
                       child: AutoRegisterButton.type(
-                          type: AutoRegisterButtonType.facebook)),
+                          type: AutoRegisterButtonType.password)),
                   Padding(
                       padding: EdgeInsets.only(
                         right: width * 0.04,

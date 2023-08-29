@@ -211,18 +211,19 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
       appBar: AppBar(
         backgroundColor: const Color(0xff05161A),
         leading: Padding(
-            padding: const EdgeInsets.only(left: 6.0, top: 8),
-            child: ModifAiBackButton(
-              onTap: () {
-                if (widget.isShared) {
-                  Get.to(() => const Home());
-                } else if (widget.isFromSearch) {
-                  Get.to(() => const Home());
-                } else {
-                  Get.off(() => const Gallery());
-                }
-              },
-            )),
+          padding: const EdgeInsets.only(left: 6.0, top: 8),
+          child: ModifAiBackButton(
+            onTap: () {
+              if (widget.isShared) {
+                Get.to(() => const Home());
+              } else if (widget.isFromSearch) {
+                Get.to(() => const Home());
+              } else {
+                Get.off(() => const Gallery());
+              }
+            },
+          ),
+        ),
         title: const ModifAiText(text: "Image Viewer", fontSize: 35),
         centerTitle: true,
         actions: [
