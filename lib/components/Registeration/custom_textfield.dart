@@ -106,7 +106,7 @@ class CustomTextField extends StatelessWidget {
           horizontal: MediaQuery.of(context).size.width * 0.01),
       child: TextFormField(
         onChanged: onChanged,
-        cursorColor: Colors.black,
+        cursorColor: const Color(0xff6da5c0),
         obscureText: obscureText!,
         style: TextStyle(
             fontWeight: FontWeight.w500,
