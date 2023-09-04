@@ -73,7 +73,6 @@ class _SendButtonState extends State<SendButton> {
           size: height * 0.03,
         ),
         onPressed: () async {
-          print("${widget.promptText} ,${widget.selectText} ");
           if (widget.promptText == "" || widget.selectText == "") {
             Get.snackbar(
               "Alert",

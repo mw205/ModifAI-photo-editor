@@ -76,19 +76,19 @@ class _ModifAiTextFieldState extends State<ModifAiTextField> {
           textAlignVertical: TextAlignVertical.top,
           cursorColor: const Color(0xff0f969c),
           style: TextStyle(
-              color: Color(0xff0f969c),
+              color: const Color(0xff0f969c),
               fontSize: MediaQuery.of(context).size.height * 0.018),
           controller: widget.textEditingController,
           decoration: InputDecoration(
             counterStyle: TextStyle(
-              color: Color(0xff0f969c),
+              color: const Color(0xff0f969c),
               fontSize: MediaQuery.of(context).size.height * 0.015,
             ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: MediaQuery.of(context).size.height * 0.03,
                 horizontal: 10),
             labelStyle: TextStyle(
-                color: Color(0xff0f969c),
+                color: const Color(0xff0f969c),
                 fontSize: MediaQuery.of(context).size.height * 0.018),
             enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: Color.fromARGB(255, 32, 82, 107)),
@@ -100,7 +100,7 @@ class _ModifAiTextFieldState extends State<ModifAiTextField> {
             labelText: widget.labelText,
             hintText: widget.hintText,
             hintStyle: TextStyle(
-                color: Color.fromARGB(123, 15, 149, 156),
+                color: const Color.fromARGB(123, 15, 149, 156),
                 fontSize: MediaQuery.of(context).size.height * 0.0175),
             suffixIcon: widget.suffixIcon,
           ),
