@@ -24,6 +24,9 @@ class _ModifAiBotPageState extends State<ModifAiBotPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController promptcontroller = TextEditingController();
   final TextEditingController selectcontroller = TextEditingController();
+  String? select;
+  String? prompt;
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -97,11 +100,11 @@ class _ModifAiBotPageState extends State<ModifAiBotPage> {
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.only(
-                                        bottom: 10.0, top: 1),
+                                        bottom: 5.0, top: 1),
                                     child: SendButton(
                                       photoId: widget.photoId,
-                                      promptText: promptcontroller.text,
-                                      selectText: selectcontroller.text,
+                                      promptText: promptcontroller.value.text,
+                                      selectText: selectcontroller.value.text,
                                     ),
                                   ),
                                   ClearTextButton(

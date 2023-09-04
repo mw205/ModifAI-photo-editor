@@ -280,7 +280,9 @@ class _ImageViewerScreenState extends State<ImageViewerScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 8.0),
+            padding: const EdgeInsets.only(
+              top: 4.0,
+            ),
             child: ModifAiFunctionsButtons.type(
               type: ModifAiFunctionsButtonsType.modifaibot,
               photoId: photoId,

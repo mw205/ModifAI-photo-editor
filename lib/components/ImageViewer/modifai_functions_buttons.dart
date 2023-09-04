@@ -130,11 +130,11 @@ class _ModifAiFunctionsButtonsState extends State<ModifAiFunctionsButtons> {
             Color(0xff05BFDB),
           ],
           buttonwidth: width * 0.45,
-          text: const Padding(
-            padding: EdgeInsets.only(left: 0.2, bottom: 9),
+          text: Padding(
+            padding: const EdgeInsets.only(left: 0.2, bottom: 9),
             child: Text(
               "Cropper",
-              style: TextStyle(color: Colors.white, fontSize: 19.5),
+              style: TextStyle(color: Colors.white, fontSize: height * 0.025),
             ),
           ),
         );
@@ -181,11 +181,11 @@ class _ModifAiFunctionsButtonsState extends State<ModifAiFunctionsButtons> {
             Color(0xff9F73AB),
           ],
           buttonwidth: width * 0.45,
-          text: const Padding(
-            padding: EdgeInsets.only(left: 0.2, bottom: 9),
+          text: Padding(
+            padding: const EdgeInsets.only(left: 0.2, bottom: 9),
             child: Text(
               "Remove\nBackground",
-              style: TextStyle(color: Colors.white, fontSize: 16.5),
+              style: TextStyle(color: Colors.white, fontSize: height * 0.02),
             ),
           ),
           isUploaded: widget.isUploaded,
@@ -235,22 +235,23 @@ class _ModifAiFunctionsButtonsState extends State<ModifAiFunctionsButtons> {
             Color(0xffFC2947),
           ],
           buttonwidth: width * 0.92,
-          text: const Padding(
-            padding: EdgeInsets.only(left: 8.0, top: 10.0),
+          text: Padding(
+            padding: const EdgeInsets.only(left: 8.0, top: 10.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   "ModifAI bot",
-                  style: TextStyle(color: Colors.white, fontSize: 18),
+                  style:
+                      TextStyle(color: Colors.white, fontSize: height * 0.025),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 5.0),
+                  padding: const EdgeInsets.only(top: 5.0),
                   child: Text(
                     "tell the bot what you want to change",
                     style: TextStyle(
-                        color: Color.fromARGB(210, 255, 255, 255),
-                        fontSize: 12),
+                        color: const Color.fromARGB(210, 255, 255, 255),
+                        fontSize: height * 0.015),
                   ),
                 )
               ],

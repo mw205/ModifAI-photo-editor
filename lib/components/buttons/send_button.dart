@@ -59,21 +59,21 @@ class _SendButtonState extends State<SendButton> {
   Widget build(BuildContext context) {
     String? mediaURL;
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
     return Container(
-      width: width * (45 / width),
-      height: height * (45 / height),
+      width: height * 0.055,
+      height: height * 0.055,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: BorderRadius.circular(height * 0.05),
         color: const Color.fromARGB(104, 15, 149, 156),
       ),
       child: IconButton(
         color: const Color.fromARGB(255, 58, 201, 208),
-        icon: const Icon(
+        icon: Icon(
           Icons.send_rounded,
-          size: 23,
+          size: height * 0.03,
         ),
         onPressed: () async {
+          print("${widget.promptText} ,${widget.selectText} ");
           if (widget.promptText == "" || widget.selectText == "") {
             Get.snackbar(
               "Alert",

@@ -10,6 +10,7 @@ import 'package:modifai/components/buttons/paste_text_button.dart';
 import 'package:modifai/components/buttons/srearch_button.dart';
 import 'package:modifai/screens/home.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:photo_manager/photo_manager.dart';
 
 import '../../screens/gallery.dart';
 import '../../screens/preview_image.dart';
@@ -104,8 +105,9 @@ class _ChooseImageButtonState extends State<ChooseImageButton> {
     switch (widget.type) {
       case ChooseImageButtonType.camera:
         return ChooseImageButton.customized(
-          buttonText: const Text("Camera",
-              style: TextStyle(fontSize: 25, color: Colors.white)),
+          buttonText: Text("Camera",
+              style:
+                  TextStyle(fontSize: (height * 0.2) / 7, color: Colors.white)),
           lottie: LottieBuilder.asset("assets/animation/5849-camera-icon.json",
               height: height * 0.157),
           onTap: () async {
@@ -139,14 +141,22 @@ class _ChooseImageButtonState extends State<ChooseImageButton> {
         );
       case ChooseImageButtonType.gallery:
         return ChooseImageButton.customized(
-          buttonText: const Text("Gallery",
-              style: TextStyle(fontSize: 25, color: Colors.white)),
+          buttonText: Text("Gallery",
+              style:
+                  TextStyle(fontSize: (height * 0.2) / 7, color: Colors.white)),
           lottie: LottieBuilder.asset(
               "assets/animation/Gallery Animation-77382-photo.json",
               height: height * 0.157,
               fit: BoxFit.contain),
           onTap: () async {
-            if (await Permission.photos.request().isGranted == true ||
+            if (await PhotoManager.getAssetCount() == 0) {
+              Get.snackbar(
+                "Alert",
+                "it is empty",
+                colorText: Colors.white,
+                snackPosition: SnackPosition.TOP,
+              );
+            } else if (await Permission.photos.request().isGranted == true ||
                 await Permission.storage.request().isGranted == true) {
               Get.to(() => const Gallery());
             } else if (await Permission.photos.request().isPermanentlyDenied ==
@@ -174,8 +184,9 @@ class _ChooseImageButtonState extends State<ChooseImageButton> {
         );
       case ChooseImageButtonType.file:
         return ChooseImageButton.customized(
-          buttonText: const Text("File",
-              style: TextStyle(fontSize: 23.4, color: Colors.white)),
+          buttonText: Text("File",
+              style: TextStyle(
+                  fontSize: (height * 0.2) / 7.5, color: Colors.white)),
           lottie: LottieBuilder.asset(
               "assets/animation/5536-document-file.json",
               height: height * 0.161),
@@ -187,8 +198,9 @@ class _ChooseImageButtonState extends State<ChooseImageButton> {
         );
       case ChooseImageButtonType.search:
         return ChooseImageButton.customized(
-            buttonText: const Text("Search",
-                style: TextStyle(fontSize: 23, color: Colors.white)),
+            buttonText: Text("Search",
+                style: TextStyle(
+                    fontSize: (height * 0.2) / 7.55, color: Colors.white)),
             lottie: LottieBuilder.asset(
               "assets/animation/89600-search-icon.json",
               height: height * 0.161,

@@ -21,7 +21,6 @@ class _GalleryContentState extends State<GalleryContent> {
   List<AssetEntity> _assets = [];
   AssetEntity? _selectedAsset;
 
-  final albums = PhotoManager.getAssetCount();
 
   Future<void> _loadAssets() async {
     final albums = await PhotoManager.getAssetPathList();

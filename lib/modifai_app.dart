@@ -73,7 +73,6 @@ class _ModifAiAppState extends State<ModifAiApp> {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-  // Disable automatic disposal of inactive pages
       debugShowCheckedModeBanner: false,
       home: const SplashScreen(),
       theme: ThemeData(
@@ -88,18 +87,3 @@ class _ModifAiAppState extends State<ModifAiApp> {
     );
   }
 }
-
-//   File fileHandled() {
-//     return File(_sharedMedia!.attachments!
-//         .firstWhere(
-//             (attachment) => attachment?.type == SharedAttachmentType.image)!
-//         .path);
-//   }
-
-//   bool sharedisImage() {
-//     return _sharedMedia != null &&
-//         _sharedMedia!.attachments != null &&
-//         _sharedMedia!.attachments!.any(
-//             (attachment) => attachment?.type == SharedAttachmentType.image);
-//   }
-// }

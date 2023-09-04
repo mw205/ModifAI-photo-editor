@@ -12,12 +12,11 @@ class _ClearTextButtonState extends State<ClearTextButton> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
     return Container(
-      width: width * (45 / width),
-      height: height * (45 / height),
+      width: height * 0.055,
+      height: height * 0.055,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: BorderRadius.circular(height * 0.05),
         color: const Color.fromARGB(104, 15, 149, 156),
       ),
       child: IconButton(
@@ -25,9 +24,9 @@ class _ClearTextButtonState extends State<ClearTextButton> {
         onPressed: () {
           widget.textEditingController.clear();
         },
-        icon: const Icon(
+        icon: Icon(
           Icons.cleaning_services_rounded,
-          size: 23,
+          size: height * 0.03,
         ),
       ),
     );

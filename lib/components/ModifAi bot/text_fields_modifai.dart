@@ -12,23 +12,23 @@ class ModifAiTextField extends StatefulWidget {
   final int? maxLines;
   final int? maxLength;
 
-  const ModifAiTextField.customized(
-      {Key? key,
-      required this.textEditingController,
-      required this.labelText,
-      this.hintText,
-      this.suffixIcon,
-      required this.maxLines,
-      this.maxLength})
-      : textFieldType = null,
+  const ModifAiTextField.customized({
+    Key? key,
+    required this.textEditingController,
+    required this.labelText,
+    this.hintText,
+    this.suffixIcon,
+    required this.maxLines,
+    this.maxLength,
+  })  : textFieldType = null,
         super(key: key);
 
-  const ModifAiTextField.type(
-      {super.key,
-      required this.textEditingController,
-      required this.textFieldType,
-      this.suffixIcon})
-      : labelText = "",
+  const ModifAiTextField.type({
+    super.key,
+    required this.textEditingController,
+    required this.textFieldType,
+    this.suffixIcon,
+  })  : labelText = "",
         hintText = "",
         maxLength = null,
         maxLines = 1;
@@ -75,15 +75,21 @@ class _ModifAiTextFieldState extends State<ModifAiTextField> {
           maxLength: widget.maxLength,
           textAlignVertical: TextAlignVertical.top,
           cursorColor: const Color(0xff0f969c),
-          style: const TextStyle(color: Color(0xff0f969c)),
+          style: TextStyle(
+              color: Color(0xff0f969c),
+              fontSize: MediaQuery.of(context).size.height * 0.018),
           controller: widget.textEditingController,
           decoration: InputDecoration(
-            counterStyle: const TextStyle(
+            counterStyle: TextStyle(
               color: Color(0xff0f969c),
+              fontSize: MediaQuery.of(context).size.height * 0.015,
             ),
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 25.0, horizontal: 10),
-            labelStyle: const TextStyle(color: Color(0xff0f969c)),
+            contentPadding: EdgeInsets.symmetric(
+                vertical: MediaQuery.of(context).size.height * 0.03,
+                horizontal: 10),
+            labelStyle: TextStyle(
+                color: Color(0xff0f969c),
+                fontSize: MediaQuery.of(context).size.height * 0.018),
             enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: Color.fromARGB(255, 32, 82, 107)),
             ),
@@ -93,8 +99,9 @@ class _ModifAiTextFieldState extends State<ModifAiTextField> {
             focusColor: const Color(0xff0f969c),
             labelText: widget.labelText,
             hintText: widget.hintText,
-            hintStyle: const TextStyle(
-                color: Color.fromARGB(123, 15, 149, 156), fontSize: 15),
+            hintStyle: TextStyle(
+                color: Color.fromARGB(123, 15, 149, 156),
+                fontSize: MediaQuery.of(context).size.height * 0.0175),
             suffixIcon: widget.suffixIcon,
           ),
         );
